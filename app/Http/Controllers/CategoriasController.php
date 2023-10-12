@@ -21,9 +21,27 @@ class CategoriasController extends Controller
 
     public function store(Request $request)
     {
+        // Definir reglas de validación
+        $rules = [
+            'nombre_categoria' => 'required|max:255', // Establecer el límite en 255 caracteres, puedes ajustarlo según tus necesidades
+            'tarifas' => 'required|numeric', // Asegurar que las tarifas sean numéricas y obligatorias
+        ];
+
+        // Mensajes personalizados para las reglas de validación
+        $messages = [
+            'nombre_categoria.required' => 'El nombre de la categoría es obligatorio.',
+            'nombre_categoria.max' => 'El nombre de la categoría no puede tener más de 255 caracteres.',
+            'tarifas.required' => 'El campo de tarifas es obligatorio.',
+            'tarifas.numeric' => 'Las tarifas deben ser un valor numérico.',
+        ];
+
+        // Validar la solicitud
+        $request->validate($rules, $messages);
+
+        // Crear la categoría si pasa la validación
         Categorias::create($request->all());
 
-        return redirect()->route('categorias.index')->with('status', 'Categoria creada satisfactoriamente');
+        return redirect()->route('categorias.index')->with('status', 'Categoría creada satisfactoriamente');
     }
 
     public function edit($id)
@@ -38,7 +56,7 @@ class CategoriasController extends Controller
 
         $categorias->update($request->all());
 
-        return redirect()->route("categorias.index")->with("status", "Categoria actualizada satisfactoriamente!");
+        return redirect()->route("categorias.index")->with("status", "Categoría actualizada satisfactoriamente!");
     }
 
     public function destroy($id)
@@ -47,6 +65,6 @@ class CategoriasController extends Controller
 
         $categorias->delete();
 
-        return redirect()->route('categorias.index')->with('status', 'Categoria eliminada satisfactoriamente');
+        return redirect()->route('categorias.index')->with('status', 'Categoría eliminada satisfactoriamente');
     }
 }
