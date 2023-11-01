@@ -6,14 +6,16 @@
 
 <h1 class="d-flex justify-content-center">Crear una nueva Categoria</h1>
 
-@if($errors->any())
-    <ul>
-        @foreach ($errors->all() as $error)
-            <li>{{ error }}</li>
-        @endforeach
-    </ul>
+<!-- @if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
 
-@endif
+@endif -->
 
 <div class="card border border-info mx-auto p-2" style="width: 40rem;">
 

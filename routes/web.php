@@ -4,6 +4,7 @@ use App\Http\Controllers\CargosController;
 use App\Http\Controllers\ServiciosController;
 use App\Http\Controllers\ZonasController;
 use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\MediopagoController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -44,3 +45,13 @@ Route::put("/servicios/{servicio}", [ServiciosController::class, "update"])->nam
 Route::delete('/servicios/{servicio}', [ServiciosController::class, 'destroy'])->name('servicios.destroy');
 Route::get("/servicios/{servicio}/edit", [ServiciosController::class, "edit"])->name("servicios.edit");
 
+//MedioPago
+Route::get('/mediopagos', [MediopagoController::class, 'index'])->name('mediopago.index');
+Route::post('/mediopagos', [MediopagoController::class, 'store'])->name('mediopago.store');
+Route::get('/mediopagos/mediopago', [MediopagoController::class, 'create'])->name('mediopago.create');
+Route::put("/mediopagos/{mediopago}", [MediopagoController::class, "update"])->name("mediopago.update");
+Route::delete('/mediopagos/{mediopago}', [MediopagoController::class, 'destroy'])->name('mediopago.destroy');
+Route::get("/mediopagos/{mediopago}/edit", [MediopagoController::class, "edit"])->name("mediopago.edit");
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

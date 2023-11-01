@@ -17,7 +17,7 @@ class MediopagoFactory extends Factory
     public function definition(): array
     {
         return [
-            'nombre_medio_pago' => fake()->sentence(),
+            'nombre_mediopago' => fake()->sentence(),
         ];
     }
 }

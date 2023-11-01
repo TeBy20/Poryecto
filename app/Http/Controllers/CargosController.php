@@ -21,6 +21,17 @@ class CargosController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'nombre_cargo' => 'required|string|max:50',
+        ];
+
+        $messages = [
+            'nombre_cargo.required' => 'El campo nombre no cumple los requisitos o posee caracteres numericos.',
+            'nombre_cargo.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+        ];
+
+        $request->validate($rules, $messages);
+
         Cargos::create($request->all());
 
         return redirect()->route('cargos.index')->with('status', 'Cargo creado satisfactoriamente');
@@ -36,9 +47,20 @@ class CargosController extends Controller
     {
         $cargos = Cargos::findOrFail($id);
 
+        $rules = [
+            'nombre_cargo' => 'required|string|max:50',
+        ];
+
+        $messages = [
+            'nombre_cargo.required' => 'El campo nombre no cumple los requisitos o posee caracteres numericos.',
+            'nombre_cargo.max' => 'El campo nombre no debe tener más de 20 caracteres.',
+        ];
+
+        $request->validate($rules, $messages);
+
         $cargos->update($request->all());
 
-        return redirect()->route("cargos.index")->with("status", "Cargos actualizado satisfactoriamente!");
+        return redirect()->route("cargos.index")->with("status", "Cargo actualizado satisfactoriamente!");
     }
 
     public function destroy($id)
@@ -50,3 +72,4 @@ class CargosController extends Controller
         return redirect()->route('cargos.index')->with('status', 'Cargo eliminado satisfactoriamente');
     }
 }
+

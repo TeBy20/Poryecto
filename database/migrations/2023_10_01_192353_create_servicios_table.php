@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre_servicio');
             $table->double('precio');
-            $table->date('fecha');
+            $table->date('fecha')->default(now());
             $table->timestamps();
         });
     }
