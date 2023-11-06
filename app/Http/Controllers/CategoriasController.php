@@ -22,6 +22,7 @@ class CategoriasController extends Controller
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
         $rules = [
             'nombre_categoria' => ['required', 'string', 'max:50', new NoSpecialCharacters],
             'tarifas' => ['required', 'numeric', 'regex:/^\d{1,13}$/'],
@@ -42,6 +43,30 @@ class CategoriasController extends Controller
 
         return redirect()->route('categorias.index')->with('status', 'Categoría creada satisfactoriamente');
         }
+=======
+        // Definir reglas de validación
+        $rules = [
+            'nombre_categoria' => 'required|max:255', // Establecer el límite en 255 caracteres, puedes ajustarlo según tus necesidades
+            'tarifas' => 'required|numeric', // Asegurar que las tarifas sean numéricas y obligatorias
+        ];
+
+        // Mensajes personalizados para las reglas de validación
+        $messages = [
+            'nombre_categoria.required' => 'El nombre de la categoría es obligatorio.',
+            'nombre_categoria.max' => 'El nombre de la categoría no puede tener más de 255 caracteres.',
+            'tarifas.required' => 'El campo de tarifas es obligatorio.',
+            'tarifas.numeric' => 'Las tarifas deben ser un valor numérico.',
+        ];
+
+        // Validar la solicitud
+        $request->validate($rules, $messages);
+
+        // Crear la categoría si pasa la validación
+        Categorias::create($request->all());
+
+        return redirect()->route('categorias.index')->with('status', 'Categoría creada satisfactoriamente');
+    }
+>>>>>>> 98eb702dce549bc68ccae9d8514219da131aff58
 
     public function edit($id)
         {
@@ -58,6 +83,7 @@ class CategoriasController extends Controller
                 'tarifas' => ['required', 'numeric', 'regex:/^\d{1,13}$/'],
             ];
 
+<<<<<<< HEAD
             $messages = [
             'nombre.required' => 'El campo nombre es obligatorio.',
             'nombre.max' => 'El campo nombre no debe tener más de 50 caracteres.',
@@ -73,6 +99,10 @@ class CategoriasController extends Controller
 
             return redirect()->route("categorias.index")->with("status", "Categoría actualizada satisfactoriamente!");
         }
+=======
+        return redirect()->route("categorias.index")->with("status", "Categoría actualizada satisfactoriamente!");
+    }
+>>>>>>> 98eb702dce549bc68ccae9d8514219da131aff58
 
     public function destroy($id)
     {
@@ -80,6 +110,6 @@ class CategoriasController extends Controller
 
         $categorias->delete();
 
-        return redirect()->route('categorias.index')->with('status', 'Categoria eliminada satisfactoriamente');
+        return redirect()->route('categorias.index')->with('status', 'Categoría eliminada satisfactoriamente');
     }
 }

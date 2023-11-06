@@ -21,6 +21,7 @@ class CargosController extends Controller
 
     public function store(Request $request)
     {
+<<<<<<< HEAD
         $rules = [
             'nombre_cargo' => 'required|string|max:50',
         ];
@@ -32,6 +33,23 @@ class CargosController extends Controller
 
         $request->validate($rules, $messages);
 
+=======
+        // Definir reglas de validación
+        $rules = [
+            'nombre_cargo' => 'required|max:255', // Establecer el límite en 255 caracteres, puedes ajustarlo según tus necesidades
+        ];
+
+        // Mensajes personalizados para las reglas de validación
+        $messages = [
+            'nombre_cargo.required' => 'El nombre del cargo es obligatorio.',
+            'nombre_cargo.max' => 'El nombre del cargo no puede tener más de 255 caracteres.',
+        ];
+
+        // Validar la solicitud
+        $request->validate($rules, $messages);
+
+        // Crear el cargo si pasa la validación
+>>>>>>> 98eb702dce549bc68ccae9d8514219da131aff58
         Cargos::create($request->all());
 
         return redirect()->route('cargos.index')->with('status', 'Cargo creado satisfactoriamente');
