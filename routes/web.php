@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\CargosController;
 use App\Http\Controllers\ServiciosController;
+use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\ZonasController;
 use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\MediopagoController;
+use Database\Seeders\VehiculoSeeder;
 use Illuminate\Support\Facades\Route;
 
 
@@ -12,6 +14,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 //Zonas
 Route::get('/zonas', [ZonasController::class, 'indexZonas'])->name('zonas.indexZonas');
@@ -52,6 +57,4 @@ Route::get('/mediopagos/mediopago', [MediopagoController::class, 'create'])->nam
 Route::put("/mediopagos/{mediopago}", [MediopagoController::class, "update"])->name("mediopago.update");
 Route::delete('/mediopagos/{mediopago}', [MediopagoController::class, 'destroy'])->name('mediopago.destroy');
 Route::get("/mediopagos/{mediopago}/edit", [MediopagoController::class, "edit"])->name("mediopago.edit");
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

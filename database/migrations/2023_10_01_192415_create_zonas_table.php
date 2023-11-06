@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("nombre_zona");
             $table->unsignedInteger("capacidad")->default(0);
+            $table->unsignedInteger("piso_zona")->default(0);
             $table->timestamps();
         });
     }

@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Mediopago extends Model
+class Matriz extends Model
 {
     use HasFactory;
-    
-    protected $fillable = ['nombre_mediopago'];
 }

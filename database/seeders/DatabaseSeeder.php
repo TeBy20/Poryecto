@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        
+
         $this->call([
             ZonasSeeder::class,
         ]);
@@ -38,5 +40,18 @@ class DatabaseSeeder extends Seeder
         $this->call([
             MediopagoSeeder::class,
         ]);
+
+        $this->call([
+            VehiculoSeeder::class,
+        ]);
+
+        $this->call([
+            AparcamientoSeeder::class,
+        ]);
+
+
+        //Roles
+        $this->call(RolSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

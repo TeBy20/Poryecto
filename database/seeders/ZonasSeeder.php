@@ -13,6 +13,8 @@ class ZonasSeeder extends Seeder
      */
     public function run(): void
     {
-        Zonas::factory(3)->create();
+        Zonas::factory()
+            ->count(10) // Crea solo 2 registros en la tabla Zonas
+            ->create();
     }
 }
