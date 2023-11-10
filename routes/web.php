@@ -7,7 +7,9 @@ use App\Http\Controllers\ZonasController;
 use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\MediopagoController;
 use Database\Seeders\VehiculoSeeder;
+use App\Http\Controllers\CajaController;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::get('/', function () {
@@ -58,3 +60,19 @@ Route::put("/mediopagos/{mediopago}", [MediopagoController::class, "update"])->n
 Route::delete('/mediopagos/{mediopago}', [MediopagoController::class, 'destroy'])->name('mediopago.destroy');
 Route::get("/mediopagos/{mediopago}/edit", [MediopagoController::class, "edit"])->name("mediopago.edit");
 
+// Ruta para la página principal de la caja
+Route::get('/caja', [CajaController::class, 'index'])->name('caja.index');
+Route::post('/caja/ingreso', [CajaController::class, 'ingreso'])->name('caja.ingreso');
+Route::post('/caja/egreso', [CajaController::class, 'egreso'])->name('caja.egreso');
+// Ruta para procesar la búsqueda de movimientos
+Route::get('/caja/movimientos', [CajaController::class, 'buscarMovimientos'])->name('caja.movimientos');
+
+// Ruta para mostrar los ingresos
+Route::get('/caja/ingresos', function () {
+    return view('caja.ingresos');
+})->name('caja.ingresos');
+
+// Ruta para mostrar los egresos
+Route::get('/caja/egresos', function () {
+    return view('caja.egresos');
+})->name('caja.egresos');

@@ -23,45 +23,25 @@ class ServiciosController extends Controller
 
     public function store(Request $request)
     {
-<<<<<<< HEAD
-        $rules = [
-            'nombre_servicio' => ['required', 'string', 'max:50', new NoSpecialCharacters],
-            'precio' => ['required', 'string', 'regex:/^\d{1,13}$/'],
-        ];
-
-        $messages = [
-            'nombre_servicio.required' => 'El campo nombre es obligatorio.',
-            'nombre_servicio.max' => 'El campo nombre no debe tener más de 50 caracteres.',
-            'nombre_servicio.regex' => 'El campo nombre no debe contener caracteres especiales.',
-            'precio.required' => 'El campo tarifas es obligatorio.',
-            'precio.regex' => 'El campo tarifas debe contener entre 1 y 13 dígitos.',
-        ];
-
-        $request->validate($rules, $messages);
-
-=======
         // Definir reglas de validación
         $rules = [
-            'nombre_servicio' => 'required|max:255',
-            'precio' => 'required|numeric',
-            'fecha' => 'required|date',
+            'nombre_servicio' => ['required', 'string', 'max:50', new NoSpecialCharacters],
+            'precio' => ['required', 'numeric', 'regex:/^\d{1,7}$/'],
         ];
 
         // Mensajes personalizados para las reglas de validación
         $messages = [
-            'nombre_servicio.required' => 'El nombre del servicio es obligatorio.',
-            'nombre_servicio.max' => 'El nombre del servicio no puede tener más de 255 caracteres.',
-            'precio.required' => 'El campo de precio es obligatorio.',
-            'precio.numeric' => 'El precio debe ser un valor numérico.',
-            'fecha.required' => 'El campo de fecha es obligatorio.',
-            'fecha.date' => 'La fecha debe ser una fecha válida.',
+            'nombre_servicio.required' => 'El campo nombre es obligatorio.',
+            'nombre_servicio.max' => 'El campo nombre no debe tener más de 50 caracteres.',
+            'nombre_servicio.regex' => 'El campo nombre no debe contener caracteres especiales.',
+            'precio.required' => 'El campo precio es obligatorio.',
+            'precio.regex' => 'El campo precio debe contener entre 1 y 7 dígitos.',
         ];
 
         // Validar la solicitud
         $request->validate($rules, $messages);
 
         // Crear el servicio si pasa la validación
->>>>>>> 98eb702dce549bc68ccae9d8514219da131aff58
         Servicios::create($request->all());
 
         return redirect()->route('servicios.index')->with('status', 'Servicio agregado satisfactoriamente');
@@ -71,19 +51,22 @@ class ServiciosController extends Controller
     {
         $servicios = Servicios::findOrFail($id);
 
+        // Reglas de validación para la actualización
         $rules = [
             'nombre_servicio' => ['required', 'string', 'max:50', new NoSpecialCharacters],
-            'precio' => ['required', 'string', 'regex:/^\d{1,7}$/'],
+            'precio' => ['required', 'numeric', 'regex:/^\d{1,7}$/'],
         ];
 
+        // Mensajes personalizados para las reglas de validación
         $messages = [
             'nombre_servicio.required' => 'El campo nombre es obligatorio.',
             'nombre_servicio.max' => 'El campo nombre no debe tener más de 50 caracteres.',
             'nombre_servicio.regex' => 'El campo nombre no debe contener caracteres especiales.',
             'precio.required' => 'El campo precio es obligatorio.',
-            'precio.regex' => 'El campo precio debe contener entre 1 y 13 dígitos.',
+            'precio.regex' => 'El campo precio debe contener entre 1 y 7 dígitos.',
         ];
 
+        // Validar la solicitud
         $request->validate($rules, $messages);
 
         $servicios->update($request->all());
@@ -100,4 +83,3 @@ class ServiciosController extends Controller
         return redirect()->route('servicios.index')->with('status', 'Servicio eliminado satisfactoriamente');
     }
 }
-

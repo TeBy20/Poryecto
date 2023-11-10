@@ -336,8 +336,12 @@ return [
             'can' => 'lista_vehiculos' // permiso del cliente
         ],
             
-            
-       
+        [
+            'text' => 'Caja', // Agregamos la opción de Caja
+            'route' => 'caja.index', // Ajusta la ruta según tu configuración
+            'icon' => 'fas fa-cash-register', // Puedes cambiar el icono según tus preferencias
+            'can' => 'lista_vehiculos' // Ajusta el permiso necesario para acceder a la Caja
+        ],
     ],
 
     /*
