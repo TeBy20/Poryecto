@@ -5,11 +5,11 @@
 @section('plugins.Datatables', true)
 
 {{-- Titulo en las tabulaciones del Navegador --}}
-@section('title', 'Categoiras')
+@section('title', 'Cocheras')
 
 {{-- Titulo en el contenido de la Pagina --}}
 @section('content_header')
-    <h1>Lista de Categoiras</h1>
+    <h1>Lista de Cocheras</h1>
 @stop
 
 {{-- Contenido de la Pagina --}}
@@ -18,8 +18,8 @@
     <div class="row">
         <div class="col-12 mb-3">
             
-            <a href="{{ route('categorias.create') }}" class="btn btn-success text-uppercase">
-                Nueva categoria
+            <a href="{{ route('panel.cocheras.create') }}" class="btn btn-success text-uppercase">
+                Nuevas Cocheras
             </a>
         </div>
         
@@ -32,6 +32,8 @@
             </div>
         @endif
 
+        Cocheras disponibles: {{ \App\Models\cocheras::where('disponible', 1)->count() }}
+
     <div class="col-12">
         <div class="card">
             <div class="card-body">
@@ -39,24 +41,26 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col" class="text-uppercase">Nombre Categoira</th>
-                            <th scope="col" class="text-uppercase">Tarifas</th>
+                            <th scope="col" class="text-uppercase">Lugar</th>
+                            <th scope="col" class="text-uppercase">Piso</th>
+                            <th scope="col" class="text-uppercase">Disponible</th>
                             <th scope="col" class="text-uppercase">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categorias as $categoria)
+                        @foreach ($cocheras as $cochera)
                         <tr>
-                            <td>{{ $categoria->id }}</td>
-                            <td>{{ $categoria->nombre_categoria }}</td>
-                            <td>{{ $categoria->tarifas }}</td>
+                            <td>{{ $cochera->id }}</td>
+                            <td>{{ $cochera->num_lugar }}</td>
+                            <td>{{ $cochera->piso }}</td>
+                            <td>{{ $cochera->disponible }}</td>
                             <td>
                                 <div class="d-flex">
                                     
-                                    <a href="{{ route('categorias.edit', $categoria) }}" class="btn btn-sm btn-warning text-white text-uppercase me-1">
+                                    <a href="{{ route('panel.cocheras.edit', $cochera) }}" class="btn btn-sm btn-warning text-white text-uppercase me-1">
                                         Editar
                                     </a>
-                                    <form action="{{ route('categorias.destroy', $categoria) }}" method="POST">
+                                    <form action="{{ route('panel.cocheras.destroy', $cochera) }}" method="POST">
                                         @csrf 
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger text-uppercase">

@@ -18,7 +18,8 @@
             <tr>
                 <th>Id</th>
                 <th>Nombre de Zona</th>
-                <th>capacidad</th>
+                <th>Capacidad</th>
+                <th>Piso</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -28,6 +29,7 @@
                 <td>{{ $zona->id }}</td>
                 <td>{{ $zona->nombre_zona }}</td>
                 <td>{{ $zona->capacidad }}</td>
+                <td>{{ $zona->piso_zona }}</td>
                 <td>
                     <div class="btn-group" role="group">
                         

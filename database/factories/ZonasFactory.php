@@ -19,6 +19,7 @@ class ZonasFactory extends Factory
         return [
             'nombre_zona' => fake()->sentence(),
             'capacidad' => fake()->numberBetween(0,20),
+            'piso_zona' => fake()->numberBetween(1,5),
         ];
     }
 }

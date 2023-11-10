@@ -16,9 +16,11 @@ class CategoriasFactory extends Factory
      */
     public function definition(): array
     {
+        $nombreCategoria = $this->faker->randomElement(['Motos', 'Autos']);
+
         return [
-            'nombre_categoria' => fake()->sentence(),
-            'tarifas' => fake()->randomFloat(2),
+            'nombre_categoria' => $nombreCategoria,
+            'tarifas' => $this->faker->randomFloat(2, 100, 1000),
         ];
     }
 }

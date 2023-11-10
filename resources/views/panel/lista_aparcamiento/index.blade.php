@@ -5,23 +5,29 @@
 @section('plugins.Datatables', true)
 
 {{-- Titulo en las tabulaciones del Navegador --}}
-@section('title', 'Categoiras')
+@section('title', 'Aparcamiento')
 
 {{-- Titulo en el contenido de la Pagina --}}
 @section('content_header')
-    <h1>Lista de Categoiras</h1>
+    <h1>Lista de Aparcamientos</h1>
 @stop
 
 {{-- Contenido de la Pagina --}}
 @section('content')
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 mb-3">
+        <div class="col-6 mb-3">
             
-            <a href="{{ route('categorias.create') }}" class="btn btn-success text-uppercase">
-                Nueva categoria
+            <a href="{{ route('aparcamiento.create') }}" class="btn btn-success text-uppercase">
+                Nuevo aparcamiento
             </a>
         </div>
+        <div class="col-3 mb-3 bg-primary rounded d-flex justify-content-center align-items-center" style="padding-top: 10px; padding-bottom: -100px">
+            <p class="text-center">Cocheras disponibles: {{ \App\Models\cocheras::where('disponible', 1)->count() }}</p>
+        </div>
+
+
+        
         
         @if (session('alert'))
             <div class="col-12">
@@ -39,24 +45,30 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col" class="text-uppercase">Nombre Categoira</th>
-                            <th scope="col" class="text-uppercase">Tarifas</th>
+                            <th scope="col" class="text-uppercase">Vehiculo</th>
+                            <th scope="col" class="text-uppercase">Fecha entrada</th>
+                            <th scope="col" class="text-uppercase">Fecha salida</th>
+                            <th scope="col" class="text-uppercase">Tiempo_estancia</th>
+                            <th scope="col" class="text-uppercase">Monto total</th>
                             <th scope="col" class="text-uppercase">Opciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($categorias as $categoria)
+                        @foreach ($aparcamientos as $aparcamiento)
                         <tr>
-                            <td>{{ $categoria->id }}</td>
-                            <td>{{ $categoria->nombre_categoria }}</td>
-                            <td>{{ $categoria->tarifas }}</td>
+                            <td>{{ $aparcamiento->id }}</td>
+                            <td>{{ $aparcamiento->vehiculo->id }}</td>
+                            <td>{{ $aparcamiento->fecha_hora_entrada }}</td>
+                            <td>{{ $aparcamiento->fecha_hora_salida }}</td>
+                            <td>{{ $aparcamiento->tiempo_estancia }}</td>
+                            <td>{{ $aparcamiento->monto_a_pagar }}</td>
                             <td>
                                 <div class="d-flex">
                                     
-                                    <a href="{{ route('categorias.edit', $categoria) }}" class="btn btn-sm btn-warning text-white text-uppercase me-1">
+                                    <a href="{{ route('aparcamiento.edit', $aparcamiento) }}" class="btn btn-sm btn-warning text-white text-uppercase me-1" style="margin-right: 5px;">
                                         Editar
                                     </a>
-                                    <form action="{{ route('categorias.destroy', $categoria) }}" method="POST">
+                                    <form action="{{ route('aparcamiento.destroy', $aparcamiento) }}" method="POST">
                                         @csrf 
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-sm btn-danger text-uppercase">

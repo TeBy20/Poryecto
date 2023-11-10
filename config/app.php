@@ -42,7 +42,9 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => (bool) env('APP_DEBUG', false),env('APP_DEBUG', true),
+    
+
 
     /*
     |--------------------------------------------------------------------------
@@ -70,7 +72,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Argentina/Buenos_Aires',
 
     /*
     |--------------------------------------------------------------------------
@@ -168,6 +170,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        Spatie\Permission\PermissionServiceProvider::class, 
+        Barryvdh\DomPDF\ServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -183,6 +187,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'PDF' => \Barryvdh\DomPDF\Facade\PDF::class,
     ])->toArray(),
 
 ];

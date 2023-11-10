@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('zonas', function (Blueprint $table) {
+        Schema::create('cocheras', function (Blueprint $table) {
             $table->id();
-            $table->string("nombre_zona");
-            $table->unsignedInteger("capacidad")->default(0);
-            $table->unsignedInteger("piso_zona")->default(0);
+            $table->unsignedInteger('num_lugar')->unique;
+            $table->unsignedInteger('piso');
+            $table->tinyInteger('disponible')->default(true);
             $table->timestamps();
         });
     }
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('zonas');
+        Schema::dropIfExists('cocheras');
     }
 };

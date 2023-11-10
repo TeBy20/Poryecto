@@ -16,7 +16,7 @@ return [
 
     'title' => '',
     'title_prefix' => '',
-    'title_postfix' => '| Estacionamiento',
+    'title_postfix' => '| Radiador Springs',
 
     /*
     |--------------------------------------------------------------------------
@@ -72,13 +72,13 @@ return [
     |
     */
 
-    'logo' => '<b>Estacionamiento</b>',
+    'logo' => '<b>Radiador Springs</b>',
     // 'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img' => 'vendor/adminlte/dist/img/EstIcon.png',
     'logo_img_class' => 'brand-image img-rounded h-30 w-30',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'Estacionamiento logo',
+    'logo_img_alt' => 'Radiador Springs logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -160,8 +160,8 @@ return [
 
     'layout_topnav' => null,
     'layout_boxed' => null,
-    'layout_fixed_sidebar' => true,
-    'layout_fixed_navbar' => true,
+    'layout_fixed_sidebar' => false,
+    'layout_fixed_navbar' => false,
     'layout_fixed_footer' => null,
     'layout_dark_mode' => null,
 
@@ -228,14 +228,14 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
+    'sidebar_collapse' => true,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
     'sidebar_collapse_remember_no_transition' => true,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
     'sidebar_nav_accordion' => true,
-    'sidebar_nav_animation_speed' => 300,
+    'sidebar_nav_animation_speed' => 100,
 
     /*
     |--------------------------------------------------------------------------
@@ -307,99 +307,52 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
+        
+        // [
+        //     'text' => 'Lista de usuarios',
+        //     'url' => '#',
+        //     'icon' => 'fas fa-users', // icono de fontawesome
+        //     'can' => 'lista_usuarios' // permiso de admin
+        // ],
         [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
+            'text' => 'Inicio',
+            'route' => 'panel.inicioPrincipal',
+            // 'url' => '#',
+            'icon' => 'fas fa-fw fa-file', // icono de fontawesome
+            'can' => 'lista_vehiculos' // permiso del cliente
         ],
         [
-            'type'         => 'fullscreen-widget',
-            'topnav_right' => true,
-        ],
-
-        // Sidebar items:
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'Lista de vehiculos',
+            'route' => 'vehiculo.index',
+            // 'url' => '#',
+            'icon' => 'fas fa-car', // icono de fontawesome
+            'can' => 'lista_vehiculos' // permiso del vendedor
         ],
         [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
+            'text' => 'Lista de aparcamiento',
+            'route' => 'aparcamiento.index',
+            // 'url' => '#',
+            'icon' => 'fas fa-parking', // icono de fontawesome
+            'can' => 'lista_vehiculos' // permiso del vendedor
         ],
         [
-            'text'        => 'pages',
-            'url'         => 'admin/pages',
-            'icon'        => 'far fa-fw fa-file',
-            'label'       => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
+            'text' => 'Categoria',
+            'route' => 'categorias.index',
+            // 'url' => '#',
+            'icon' => 'fas fa-fw fa-file', // icono de fontawesome
+            'can' => 'lista_vehiculos' // permiso del cliente
         ],
         [
-            'text' => 'change_password',
-            'url'  => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
+            'text' => 'Cocheras',
+            'route' => 'panel.cocheras.index',
+            // 'url' => '#',
+            'icon' => 'fas fa-fw fa-file', // icono de fontawesome
+            'can' => 'lista_vehiculos' // permiso del cliente
         ],
-        [
-            'text'    => 'multilevel',
-            'icon'    => 'fas fa-fw fa-share',
-            'submenu' => [
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-                [
-                    'text'    => 'level_one',
-                    'url'     => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url'  => '#',
-                        ],
-                        [
-                            'text'    => 'level_two',
-                            'url'     => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url'  => '#',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                [
-                    'text' => 'level_one',
-                    'url'  => '#',
-                ],
-            ],
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],
+        
+            
+            
+       
     ],
 
     /*
