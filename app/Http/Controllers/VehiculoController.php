@@ -31,7 +31,72 @@ class VehiculoController extends Controller
          return $pdf->stream('vehiculo_' . $vehiculo->id . '.pdf');
      }
      
+     public function buscarVehiculo(Request $request)
+     {
+         $request->validate([
+             'placa' => 'nullable|string|max:255',
+             'codigo' => 'nullable|string|min:6', // Cambiado a string y ajustado a 6 caracteres
+         ]);
+     
+         $placa = $request->input('placa');
+         $codigo = $request->input('codigo');
+     
+         $vehiculo = null;
+     
+         if ($placa) {
+             $vehiculo = Vehiculo::where('placa_vehiculo', $placa)->first();
+         } elseif ($codigo) {
+             $vehiculo = Vehiculo::where('codigo', $codigo)->first();
+         }
+     
+         if ($vehiculo) {
+             // Calcula la diferencia de horas
+             $horaEntrada = \Carbon\Carbon::parse($vehiculo->fecha_entrada . ' ' . $vehiculo->hora_entrada);
+             $horaSalida = \Carbon\Carbon::now();
+             $diferenciaHoras = $horaSalida->diffInHours($horaEntrada);
+     
+             return view('panel.lista_vehiculos.buscar', compact('vehiculo', 'diferenciaHoras'));
+         } else {
+             return view('panel.lista_vehiculos.buscar')->with('error', 'Vehículo no encontrado.');
+         }
+     }
+ 
+     public function procesarBusqueda(Request $request)
+     {
+         $request->validate([
+             'placa' => 'required_without:codigo|string',
+             'codigo' => 'required_without:placa|numeric',
+         ]);
+ 
+         $filtro = $request->has('placa') ? 'placa_vehiculo' : 'codigo';
+ 
+         $vehiculo = Vehiculo::where($filtro, $request->input($filtro))->first();
+ 
+         if (!$vehiculo) {
+            return redirect()->route('buscar-vehiculo')->with('error', 'No se encontró ningún vehículo con la información proporcionada.');
+        }
+    
+        // Calcula la diferencia de horas
+        $horaEntrada = \Carbon\Carbon::parse($vehiculo->fecha_hora_entrada);
+        $horaSalida = \Carbon\Carbon::now();
+        $diferenciaHoras = $horaSalida->diffInHours($horaEntrada);
 
+        $tarifa = $vehiculo->categoria->tarifas;
+
+
+        $montoTotal = $diferenciaHoras * $tarifa;
+    
+        return view('panel.lista_vehiculos.buscar', compact('vehiculo', 'diferenciaHoras', 'montoTotal'));
+    }
+
+ 
+     public function registrarSalida(Vehiculo $vehiculo)
+     {
+         // Agrega lógica para registrar la salida del vehículo (actualizar hora de salida, calcular tarifa, etc.)
+         // ...
+ 
+         return view('panel.lista_vehiculos.pago', compact('vehiculo'));
+     }
 
     public function create()
     {

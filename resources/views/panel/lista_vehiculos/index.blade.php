@@ -36,6 +36,7 @@
                                 <th scope="col" class="text-uppercase">Número de Placa</th>
                                 <th scope="col" class="text-uppercase">Categoría</th>
                                 <th scope="col" class="text-uppercase">Fecha de Entrada</th>
+                                <th scope="col" class="text-uppercase">Hora de Entrada</th>
                                 <th scope="col" class="text-uppercase">Codigo</th>
                                 <th scope="col" class="text-uppercase">Opciones</th>
                             </tr>
@@ -46,7 +47,8 @@
                                 <td>{{ $vehiculo->id }}</td>
                                 <td>{{ $vehiculo->placa_vehiculo }}</td>
                                 <td>{{ $vehiculo->categoria->nombre_categoria }}</td>
-                                <td>{{ $vehiculo->fecha_hora_entrada }}</td>
+                                <td>{{ $vehiculo->fecha_entrada }}</td>
+                                <td>{{ $vehiculo->hora_entrada }}</td>
                                 <td>{{ $vehiculo->codigo }}</td>
 
                                 <td>

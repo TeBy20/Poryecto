@@ -11,7 +11,7 @@ class Vehiculo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['placa_vehiculo', 'categoria_id', 'fecha_hora_entrada', 'codigo']; // Agrega 'codigo' a $fillable
+    protected $fillable = ['placa_vehiculo', 'categoria_id', 'hora_entrada', 'fecha_entrada', 'codigo']; // Agrega 'codigo' a $fillable
 
     protected static function boot()
     {

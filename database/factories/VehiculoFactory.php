@@ -20,10 +20,15 @@ class VehiculoFactory extends Factory
 
         $categoriaId = Categorias::inRandomOrder()->first()->id;
 
+        // Obtener fecha y hora actuales
+        $fechaEntrada = now()->format('Y-m-d');
+        $horaEntrada = now()->toTimeString();
+
         return [
-            'placa_vehiculo' => fake()->unique()->word,
-            'categoria_id' => $categoriaId, //Fk de id de categorias
-            'fecha_hora_entrada' => now()->toDateTimeString(),
+            'placa_vehiculo' => $this->faker->unique()->word,
+            'categoria_id' => $categoriaId, // FK del id de categorias
+            'fecha_entrada' => $fechaEntrada,
+            'hora_entrada' => $horaEntrada,
         ];
     }
 }

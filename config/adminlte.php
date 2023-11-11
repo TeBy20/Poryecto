@@ -329,6 +329,13 @@ return [
             'can' => 'lista_vehiculos' // permiso del vendedor
         ],
         [
+            'text' => 'Salida vehiculo',
+            'route' => 'buscar-vehiculo',
+            // 'url' => '#',
+            'icon' => 'fas fa-car', // icono de fontawesome
+            'can' => 'lista_vehiculos' // permiso del vendedor
+        ],
+        [
             'text' => 'Lista de aparcamiento',
             'route' => 'aparcamiento.index',
             // 'url' => '#',

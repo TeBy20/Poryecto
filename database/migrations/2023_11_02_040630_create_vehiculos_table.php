@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -11,15 +12,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        
-
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->id();
             $table->string('placa_vehiculo');
             $table->unsignedBigInteger('categoria_id');
-            $table->dateTime('fecha_hora_entrada')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->string('codigo', 6)->unique(); // Nuevo campo "codigo"
+            $table->date('fecha_entrada');
+            $table->time('hora_entrada');
+            $table->string('codigo', 6)->unique();
 
             $table->foreign('categoria_id')
                     ->references('id')
@@ -30,7 +29,7 @@ return new class extends Migration
         });
 
         // Actualización para establecer valores por defecto
-        DB::table('vehiculos')->update(['fecha_hora_entrada' => now()]);
+        DB::table('vehiculos')->update(['fecha_entrada' => now()->format('Y-m-d')]);
     }
 
     /**
@@ -41,4 +40,3 @@ return new class extends Migration
         Schema::dropIfExists('vehiculos');
     }
 };
-
