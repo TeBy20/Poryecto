@@ -13,6 +13,17 @@ class Vehiculo extends Model
 
     protected $fillable = ['placa_vehiculo', 'categoria_id', 'hora_entrada', 'fecha_entrada', 'codigo']; // Agrega 'codigo' a $fillable
 
+    protected $attributes = [
+        'hora_entrada' => null, // Opcionalmente, puedes establecerlo a '00:00:00' si lo prefieres
+    ];
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            $model->hora_entrada = now()->format('H:i:s');
+        });
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -21,6 +32,7 @@ class Vehiculo extends Model
         static::creating(function ($vehiculo) {
             $vehiculo->codigo = strtoupper(substr(md5(uniqid(rand(), true)), 0, 6));
         });
+        
     }
 
     public function categoria()

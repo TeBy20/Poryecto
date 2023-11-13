@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Carbon\Carbon;
 
 return new class extends Migration
 {
@@ -16,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('placa_vehiculo');
             $table->unsignedBigInteger('categoria_id');
-            $table->date('fecha_entrada');
-            $table->time('hora_entrada');
+            $table->date('fecha_entrada')->default(now()->toDateString());
+            $table->time('hora_entrada')->default(now()->toTimeString());
             $table->string('codigo', 6)->unique();
 
             $table->foreign('categoria_id')
@@ -29,7 +30,7 @@ return new class extends Migration
         });
 
         // Actualización para establecer valores por defecto
-        DB::table('vehiculos')->update(['fecha_entrada' => now()->format('Y-m-d')]);
+        // DB::table('vehiculos')->update(['fecha_entrada' => now()->format('Y-m-d')]);
     }
 
     /**
