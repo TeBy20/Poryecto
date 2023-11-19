@@ -42,7 +42,7 @@ class Vehiculo extends Model
 
     public function aparcamientos()
     {
-        return $this->hasMany(Aparcamiento::class, 'id_vehiculo');
+        return $this->hasMany(Aparcamiento::class, 'placa_vehiculo');
     }
 }
 

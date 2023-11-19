@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('vehiculos', function (Blueprint $table) {
             $table->id();
-            $table->string('placa_vehiculo');
+            $table->string('placa_vehiculo')->unique();
             $table->unsignedBigInteger('categoria_id');
             $table->date('fecha_entrada')->default(now()->toDateString());
             $table->time('hora_entrada')->default(now()->toTimeString());

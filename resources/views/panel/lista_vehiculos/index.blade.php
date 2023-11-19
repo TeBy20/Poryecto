@@ -12,9 +12,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 mb-3">
-            <a href="{{ route('vehiculo.create') }}" class="btn btn-success text-uppercase">
+            <a href="{{ route('vehiculo.create') }}" class="btn btn-success text-uppercase" target="_blank">
                 Nuevo vehiculo
             </a>
+
+            <button class="btn btn-primary text-uppercase" onclick="actualizarPagina()">
+                Actualizar Página
+            </button>
         </div>
         
         @if (session('alert'))
@@ -53,17 +57,17 @@
 
                                 <td>
                                     <div class="d-flex">
-                                        <a href="{{ route('vehiculo.edit', $vehiculo) }}" class="btn btn-sm btn-warning text-white text-uppercase me-1">
+                                        <a href="{{ route('vehiculo.edit', $vehiculo) }}" class="btn btn-sm btn-warning text-white text-uppercase m-1">
                                             Editar
                                         </a>
                                         <form action="{{ route('vehiculo.destroy', $vehiculo) }}" method="POST">
                                             @csrf 
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger text-uppercase">
+                                            <button type="submit" class="btn btn-sm btn-danger text-uppercase m-1">
                                                 Eliminar
                                             </button>
                                         </form>
-                                        <a href="{{ route('exportar-vehiculos-pdf', $vehiculo) }}" class="btn btn-danger" title="PDF" target="blank">
+                                        <a href="{{ route('exportar-vehiculos-pdf', $vehiculo) }}" class="btn btn-sm btn-danger m-1" title="PDF" target="blank">
                                             <i class="fas fa-file-pdf"></i>PDF
                                         </a>
 
@@ -86,4 +90,9 @@
 
 @section('js')
     <script src="{{ asset('js/productos.js') }}"></script>
+    <script>
+        function actualizarPagina() {
+            location.reload(true); // Esto recargará la página forzando la recarga desde el servidor
+        }
+    </script>
 @stop

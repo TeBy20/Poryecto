@@ -32,7 +32,15 @@
             </div>
         @endif
 
-        Cocheras disponibles: {{ \App\Models\cocheras::where('disponible', 1)->count() }}
+        
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">{{ \App\Models\cocheras::where('disponible', 1)->count() }}</h4>
+                </div>
+            </div>
+        </div>
 
     <div class="col-12">
         <div class="card">

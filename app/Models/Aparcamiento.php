@@ -9,7 +9,7 @@ class Aparcamiento extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['fecha_hora_entrada', 'fecha_hora_salida', 'monto_a_pagar', 'tiempo_estancia', 'propietario'];
+    protected $fillable = ['fecha_salida', 'hora_salida','fecha_salida', 'hora_salida', 'timepo_estancia', 'monto_a_pagar', 'placa_vehiculo', 'codigo', 'categoria_id'];
 
     // Relación con la tabla Vehiculo (uno a uno)
     public function vehiculo()

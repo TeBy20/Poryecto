@@ -343,7 +343,7 @@ return [
             'can' => 'lista_vehiculos' // permiso del vendedor
         ],
         [
-            'text' => 'Categoria',
+            'text' => 'Categorias',
             'route' => 'categorias.index',
             // 'url' => '#',
             'icon' => 'fas fa-fw fa-file', // icono de fontawesome

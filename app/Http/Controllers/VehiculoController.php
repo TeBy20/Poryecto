@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
 use App\Models\Categorias;
+use App\Models\cocheras;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class VehiculoController extends Controller
@@ -31,72 +34,7 @@ class VehiculoController extends Controller
          return $pdf->stream('vehiculo_' . $vehiculo->id . '.pdf');
      }
      
-     public function buscarVehiculo(Request $request)
-     {
-         $request->validate([
-             'placa' => 'nullable|string|max:255',
-             'codigo' => 'nullable|string|min:6', // Cambiado a string y ajustado a 6 caracteres
-         ]);
      
-         $placa = $request->input('placa');
-         $codigo = $request->input('codigo');
-     
-         $vehiculo = null;
-     
-         if ($placa) {
-             $vehiculo = Vehiculo::where('placa_vehiculo', $placa)->first();
-         } elseif ($codigo) {
-             $vehiculo = Vehiculo::where('codigo', $codigo)->first();
-         }
-     
-         if ($vehiculo) {
-             // Calcula la diferencia de horas
-             $horaEntrada = \Carbon\Carbon::parse($vehiculo->fecha_entrada . ' ' . $vehiculo->hora_entrada);
-             $horaSalida = \Carbon\Carbon::now();
-             $diferenciaHoras = $horaSalida->diffInHours($horaEntrada);
-     
-             return view('panel.lista_vehiculos.buscar', compact('vehiculo', 'diferenciaHoras'));
-         } else {
-             return view('panel.lista_vehiculos.buscar')->with('error', 'Vehículo no encontrado.');
-         }
-     }
- 
-     public function procesarBusqueda(Request $request)
-     {
-         $request->validate([
-             'placa' => 'required_without:codigo|string',
-             'codigo' => 'required_without:placa|numeric',
-         ]);
- 
-         $filtro = $request->has('placa') ? 'placa_vehiculo' : 'codigo';
- 
-         $vehiculo = Vehiculo::where($filtro, $request->input($filtro))->first();
- 
-         if (!$vehiculo) {
-            return redirect()->route('buscar-vehiculo')->with('error', 'No se encontró ningún vehículo con la información proporcionada.');
-        }
-    
-        // Calcula la diferencia de horas
-        $horaEntrada = \Carbon\Carbon::parse($vehiculo->fecha_hora_entrada);
-        $horaSalida = \Carbon\Carbon::now();
-        $diferenciaHoras = $horaSalida->diffInHours($horaEntrada);
-
-        $tarifa = $vehiculo->categoria->tarifas;
-
-
-        $montoTotal = $diferenciaHoras * $tarifa;
-    
-        return view('panel.lista_vehiculos.buscar', compact('vehiculo', 'diferenciaHoras', 'montoTotal'));
-    }
-
- 
-     public function registrarSalida(Vehiculo $vehiculo)
-     {
-         // Agrega lógica para registrar la salida del vehículo (actualizar hora de salida, calcular tarifa, etc.)
-         // ...
- 
-         return view('panel.lista_vehiculos.pago', compact('vehiculo'));
-     }
 
     public function create()
     {
@@ -108,11 +46,75 @@ class VehiculoController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+     private function generarCodigoUnico()
+     {
+         return Str::random(8); // Puedes ajustar la longitud del código según tus necesidades
+     }
+
+
+    public function contadorVehiculos()
+    {
+        $contadorVehiculos = \DB::select("SELECT COUNT(*) as count FROM vehiculos")[0]->count;
+        return $contadorVehiculos;
+    }
+
+    public function contadorCocheras()
+    {
+       $contadorCocheras = \DB::select("SELECT COUNT(*) as count FROM cocheras")[0]->count;
+       return $contadorCocheras;
+    }
+
+    public function cocherasTotal()
+    {
+        $cocherasTotal = $this->contadorCocheras();
+        $vehiculosTotal = $this->contadorVehiculos();
+
+        $total = $cocherasTotal - $vehiculosTotal;
+
+        return $total;
+    }
+
+
     public function store(Request $request)
     {
-        Vehiculo::create($request->all());
+        // Validar los datos del formulario según sea necesario
+        $request->validate([
+            
+            'placa_vehiculo' => 'required|string|max:255',
+            'categoria_id' => 'required|numeric',
+            // ... otras reglas de validación ...
+        ]);
 
-        return redirect()->route('vehiculo.index')->with('status', 'Vehiculo agregado satisfactoriamente');
+        // Crear un nuevo vehículo y establecer la fecha y hora de entrada
+        $vehiculo = Vehiculo::create([
+            'placa_vehiculo' => $request->input('placa_vehiculo'),
+            'categoria_id' => $request->input('categoria_id'),
+            // ... otras columnas ...
+            'fecha_entrada' => Carbon::now()->toDateString(), // Establecer la fecha actual
+            'hora_entrada' => Carbon::now()->toTimeString(), // Establecer la hora actual
+            'codigo' => $this->generarCodigoUnico(), // Debes implementar tu lógica para generar un código único
+        ]);
+
+        // Decrementar el contador de cocheras
+       
+
+        return $this->generarYMostrarPDF($vehiculo);
+    }
+    
+    private function generarYMostrarPDF(Vehiculo $vehiculo)
+    {
+        // Cargar la vista del PDF
+        $pdfView = view('panel.lista_vehiculos.pdf_vehiculo', compact('vehiculo'));
+
+        // Generar el PDF
+        $pdf = PDF::loadHtml($pdfView);
+
+        // Establecer el nombre del archivo PDF
+        $filename = 'vehiculo_' . $vehiculo->id . '.pdf';
+
+        // Descargar el PDF en una nueva ventana
+        return $pdf->stream($filename);
     }
 
     /**
@@ -126,24 +128,37 @@ class VehiculoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Vehiculo $vehiculo)
+    public function edit($id)
     {
-        //
+        $vehiculo = Vehiculo::findOrFail($id);
+
+        $categorias = Categorias::all();
+        return view("panel.lista_vehiculos.edit", ["vehiculo" => $vehiculo, "categorias" => $categorias]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Vehiculo $vehiculo)
+    public function update(Request $request, $id)
     {
-        //
+        $vehiculo = Vehiculo::findOrFail($id);
+
+        $vehiculo->update($request->all());
+
+        return redirect()->route("vehiculo.index")->with("status", "Vehiculo actualizada satisfactoriamente!");
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Vehiculo $vehiculo)
+    public function destroy($id)
     {
-        //
+        $vehiculo = Vehiculo::findOrFail($id);
+
+        $vehiculo->delete();
+
+        
+
+        return redirect()->route('vehiculo.index')->with('status', 'Vehiculo eliminada satisfactoriamente');
     }
 }

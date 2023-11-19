@@ -20,16 +20,18 @@ class AparcamientoFactory extends Factory
     public function definition(): array
     {
 
-        $vehiculoId = Vehiculo::inRandomOrder()->first()->id;
-
-        $PorDefinirse = "Por definirse";
+        $vehiculo = Vehiculo::inRandomOrder()->first();
 
         return [
-            'fecha_hora_entrada' => now()->toDateTimeString(), // Establece la hora actual
-            'fecha_hora_salida' => $PorDefinirse, // Cambia esto según tus necesidades
-            'id_vehiculo' => $vehiculoId,
-            'monto_a_pagar' => $PorDefinirse, 
-            'tiempo_estancia' => $PorDefinirse,
+            'categoria_id' => $vehiculo->categoria_id,
+            'placa_vehiculo' => $vehiculo->placa_vehiculo,
+            'codigo' => $vehiculo->codigo,
+            'fecha_salida' => $this->faker->date,
+            'hora_salida' => $this->faker->time,
+            'fecha_entrada' => $this->faker->date,
+            'hora_entrada' => $this->faker->time,
+            'tiempo_estancia' => $this->faker->numberBetween(1, 300),
+            'monto_total' =>  $this->faker->randomFloat(2, 10, 100),// Modifica según la lógica de tu aplicación
         ];
     }
 

@@ -14,16 +14,7 @@ class AparcamientoSeeder extends Seeder
      */
     public function run(): void
     {
-        Aparcamiento::factory()
-            ->count(10)
-            ->create()
-            ->each(function ($aparcamiento) {
-                // Asignar vehículo aleatorio a un aparcamiento
-                $vehiculo = Vehiculo::inRandomOrder()->first();
-                $aparcamiento->id_vehiculo = $vehiculo->id;
-                $aparcamiento->save();
-
-            });
+        Aparcamiento::factory()->count(2)->create();
     }
 }
 

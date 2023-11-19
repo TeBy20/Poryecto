@@ -13,17 +13,21 @@ return new class extends Migration
     {
         Schema::create('aparcamientos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_vehiculo');
-            $table->dateTime('fecha_hora_entrada')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->string('fecha_hora_salida');
-            $table->string('monto_a_pagar');
-            $table->string('tiempo_estancia');
+            $table->string('placa_vehiculo');
+            $table->string('codigo');
+            $table->unsignedBigInteger('categoria_id')->nullable();
+            $table->date('fecha_salida')->nullable();
+            $table->time('hora_salida')->nullable();
+            $table->date('fecha_entrada')->nullable();
+            $table->time('hora_entrada')->nullable();
+            $table->integer('tiempo_estancia')->default(0);
+            $table->string('monto_total')->nullable();
+
             
-    
-            $table->foreign('id_vehiculo')
-                    ->references('id')
-                    ->on('vehiculos')
-                    ->onDelete('cascade');
+            $table->foreign('placa_vehiculo')->references('placa_vehiculo')->on('vehiculos')->onDelete('cascade');
+            $table->foreign('codigo')->references('codigo')->on('vehiculos')->onDelete('cascade');
+            $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
+ 
 
 
             $table->timestamps();

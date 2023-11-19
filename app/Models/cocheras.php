@@ -9,7 +9,7 @@ class cocheras extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['num_lugar', 'piso', 'disponible'];
+    protected $fillable = ['num_lugar', 'piso', 'disponible', 'numero'];
 
 
 }
