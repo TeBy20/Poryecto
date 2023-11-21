@@ -31,7 +31,6 @@
 
 @isset($vehiculo)
 
-
 <div class="card-body">
 
     <form action="{{ route('aparcamiento.store') }}" method="POST" novalidate>
@@ -87,7 +86,7 @@
         <br>
 
         <button class="btn btn-primary" type="submit">Guardar Aparcamiento</button>
-        <a class="btn btn-secondary" href="{{ route('aparcamiento.index') }}">Cancelar</a>
+        <a class="btn btn-secondary" href="{{ route('panel.aparcamiento.buscar') }}">Cancelar</a>
     </form>
 
 

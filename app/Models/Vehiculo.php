@@ -11,10 +11,11 @@ class Vehiculo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['placa_vehiculo', 'categoria_id', 'hora_entrada', 'fecha_entrada', 'codigo']; // Agrega 'codigo' a $fillable
+    protected $fillable = ['placa_vehiculo', 'categoria_id', 'hora_entrada', 'fecha_entrada', 'codigo', 'estado']; // Agrega 'codigo' y 'estado' a $fillable
 
     protected $attributes = [
         'hora_entrada' => null, // Opcionalmente, puedes establecerlo a '00:00:00' si lo prefieres
+        'estado' => 'estacionado', // Establece el estado por defecto en 'estacionado'
     ];
 
     protected static function booted()
@@ -32,7 +33,6 @@ class Vehiculo extends Model
         static::creating(function ($vehiculo) {
             $vehiculo->codigo = strtoupper(substr(md5(uniqid(rand(), true)), 0, 6));
         });
-        
     }
 
     public function categoria()
@@ -45,4 +45,3 @@ class Vehiculo extends Model
         return $this->hasMany(Aparcamiento::class, 'placa_vehiculo');
     }
 }
-

@@ -322,22 +322,15 @@ return [
             'can' => 'lista_vehiculos' // permiso del cliente
         ],
         [
-            'text' => 'Lista de vehiculos',
-            'route' => 'vehiculo.index',
+            'text' => 'ENTRADAS',
+            'route' => 'vehiculo.create',
             // 'url' => '#',
             'icon' => 'fas fa-car', // icono de fontawesome
             'can' => 'lista_vehiculos' // permiso del vendedor
         ],
         [
-            'text' => 'Salida vehiculo',
-            'route' => 'buscar-vehiculo',
-            // 'url' => '#',
-            'icon' => 'fas fa-car', // icono de fontawesome
-            'can' => 'lista_vehiculos' // permiso del vendedor
-        ],
-        [
-            'text' => 'Lista de aparcamiento',
-            'route' => 'aparcamiento.index',
+            'text' => 'SALIDAS',
+            'route' => 'aparcamiento.create',
             // 'url' => '#',
             'icon' => 'fas fa-parking', // icono de fontawesome
             'can' => 'lista_vehiculos' // permiso del vendedor
@@ -365,6 +358,12 @@ return [
         [
             'text' => 'Lista de usuarios',
             'route' => 'users.index', // Assuming 'users.index' is the route for listing users
+            'icon' => 'fas fa-users', // Font Awesome icon for users
+            'can' => 'lista_vehiculos', // Permission for listing users
+        ],
+        [
+            'text' => 'Reportes',
+            'route' => 'reportes.index', // Assuming 'users.index' is the route for listing users
             'icon' => 'fas fa-users', // Font Awesome icon for users
             'can' => 'lista_vehiculos', // Permission for listing users
         ]

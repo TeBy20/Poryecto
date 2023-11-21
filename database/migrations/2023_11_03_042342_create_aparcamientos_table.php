@@ -23,12 +23,10 @@ return new class extends Migration
             $table->integer('tiempo_estancia')->default(0);
             $table->string('monto_total')->nullable();
 
-            
+
             $table->foreign('placa_vehiculo')->references('placa_vehiculo')->on('vehiculos')->onDelete('cascade');
             $table->foreign('codigo')->references('codigo')->on('vehiculos')->onDelete('cascade');
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
- 
-
 
             $table->timestamps();
         });

@@ -19,7 +19,7 @@ class AparcamientoController extends Controller
 
         $vehiculosRegistradosHoy = Vehiculo::whereDate('created_at', today())->count();
 
-        return view('panel.lista_aparcamiento.index', compact('aparcamientos'));
+        return view('panel.lista_aparcamiento.buscar', compact('aparcamientos'));
     }
 
     /**

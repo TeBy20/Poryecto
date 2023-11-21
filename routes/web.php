@@ -10,6 +10,7 @@ use App\Http\Controllers\MediopagoController;
 use Database\Seeders\VehiculoSeeder;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CajaController;
+use App\Http\Controllers\ReporteController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -88,3 +89,8 @@ Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show')
 Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+Route::get('/reportes', [VehiculoController::class, 'index'])->name('reportes.index');
+Route::get('/reportes/lista-tickets', [VehiculoController::class, 'listaTickets'])->name('lista_tickets');
+Route::get('/reportes/salidas', [VehiculoController::class, 'reporteSalidas'])->name('reporte_salidas');
+Route::get('/reportes/entradas', [VehiculoController::class, 'reporteEntradas'])->name('reporte_entradas');
