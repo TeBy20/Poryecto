@@ -9,7 +9,7 @@
 
 {{-- Titulo en el contenido de la Pagina --}}
 @section('content_header')
-    <h1>Lista de Categoiras</h1>
+    <h1>Lista de Categorias</h1>
 @stop
 
 {{-- Contenido de la Pagina --}}

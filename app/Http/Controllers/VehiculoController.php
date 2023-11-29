@@ -20,7 +20,9 @@ class VehiculoController extends Controller
 
     public function index()
     {
+
         return view('panel.reportes.index');
+
     }
 
     public function reporteSalidas()
@@ -29,7 +31,9 @@ class VehiculoController extends Controller
         $salidas = Aparcamiento::all();
 
         // Retorna la vista con los datos de salidas
+
         return view('panel.reportes.salidas', compact('salidas'));
+
     }
 
     public function reporteEntradas()
@@ -38,13 +42,24 @@ class VehiculoController extends Controller
         $entradas = Vehiculo::all();
 
         // Retorna la vista con los datos de entradas
+
         return view('panel.reportes.entradas', compact('entradas'));
+
     }
 
-    public function listaTickets()
+    public function listaTickets(Request $request)
     {
-        // Obtén la lista de vehículos con la relación de categoría
-        $vehiculos = Vehiculo::with('categoria')->get();
+        // Obtén la lista de vehículos con la relación de categoría y aplica el filtro por fecha
+        $query = Vehiculo::with('categoria');
+
+        if ($request->has('fechaInicio') && $request->has('fechaFin')) {
+            $fechaInicio = Carbon::parse($request->input('fechaInicio'))->startOfDay();
+            $fechaFin = Carbon::parse($request->input('fechaFin'))->endOfDay();
+
+            $query->whereBetween('fecha_entrada', [$fechaInicio, $fechaFin]);
+        }
+
+        $vehiculos = $query->get();
 
         // Itera sobre los vehículos
         foreach ($vehiculos as $vehiculo) {
@@ -96,7 +111,7 @@ class VehiculoController extends Controller
 
     public function contadorVehiculos()
     {
-        $contadorVehiculos = \DB::select("SELECT COUNT(*) as count FROM vehiculos")[0]->count;
+        $contadorVehiculos = \DB::select("SELECT COUNT(*) as count FROM vehiculos WHERE estado = 'Estacionado'")[0]->count;
         return $contadorVehiculos;
     }
 
@@ -118,6 +133,22 @@ class VehiculoController extends Controller
 
     public function store(Request $request)
     {
+
+        $rules = [
+            'placa_vehiculo' => ['required', 'string', 'min:6', 'max:15', 'regex:/^[A-Za-z0-9\s]+$/'],
+            'categoria_id' => 'required|numeric',
+        ];
+
+        $messages = [
+            'placa_vehiculo.required' => 'El campo nombre es obligatorio.',
+            'placa_vehiculo.min' => 'El campo nombre no debe tener menos de 6 caracteres.',
+            'placa_vehiculo.max' => 'El campo nombre no debe tener mas de 15 caracteres.',
+            'placa_vehiculo.regex' => 'El campo nombre no debe contener caracteres especiales.',
+       
+        ];
+
+        $request->validate($rules, $messages);
+
         // Validar los datos del formulario según sea necesario
         $request->validate([
             'placa_vehiculo' => 'required|string|max:255',
@@ -132,7 +163,8 @@ class VehiculoController extends Controller
             'fecha_entrada' => Carbon::now()->toDateString(),
             'hora_entrada' => Carbon::now()->toTimeString(),
             'codigo' => $this->generarCodigoUnico(),
-            'estado' => 'estacionado', // Establecer el estado por defecto en 'estacionado'
+            'estado' => 'estacionado',
+            'tarifas_id' => Categorias::find($request->input('categoria_id'))->tarifas, // Obtener la tarifa de la categoría
         ]);
 
         return $this->generarYMostrarPDF($vehiculo);
@@ -140,8 +172,11 @@ class VehiculoController extends Controller
 
     private function generarYMostrarPDF(Vehiculo $vehiculo)
     {
-        // Cargar la vista del PDF
-        $pdfView = view('panel.lista_vehiculos.pdf_vehiculo', compact('vehiculo'));
+        // Obtener la tarifa de la categoría del vehículo
+        $tarifa = $vehiculo->categoria->tarifas;
+
+        // Cargar la vista del PDF y pasar la tarifa
+        $pdfView = view('panel.lista_vehiculos.pdf_vehiculo', compact('vehiculo', 'tarifa'));
 
         // Generar el PDF
         $pdf = PDF::loadHtml($pdfView);
@@ -164,8 +199,23 @@ class VehiculoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit($id, Request $request )
     {
+        $rules = [
+            'placa_vehiculo' => ['required', 'string', 'min:6', 'max:15', 'regex:/^[A-Za-z0-9\s]+$/'],
+            
+        ];
+
+        $messages = [
+            'placa_vehiculo.required' => 'El campo nombre es obligatorio.',
+            'placa_vehiculo.min' => 'El campo nombre no debe tener menos de 6 caracteres.',
+            'placa_vehiculo.max' => 'El campo nombre no debe tener mas de 15 caracteres.',
+            'placa_vehiculo.regex' => 'El campo nombre no debe contener caracteres especiales.',
+       
+        ];
+
+        $request->validate($rules, $messages);
+
         $vehiculo = Vehiculo::findOrFail($id);
         $categorias = Categorias::all();
         return view("panel.lista_vehiculos.edit", ["vehiculo" => $vehiculo, "categorias" => $categorias]);
@@ -178,9 +228,12 @@ class VehiculoController extends Controller
     {
         $vehiculo = Vehiculo::findOrFail($id);
 
+        // Evita la edición de la tarifa
+        $request->request->remove('tarifas_id');
+
         $vehiculo->update($request->all());
 
-        return redirect()->route("vehiculo.index")->with("status", "Vehiculo actualizada satisfactoriamente!");
+        return redirect()->route("vehiculo.index")->with("status", "Vehiculo actualizado satisfactoriamente!");
     }
 
     /**
@@ -193,5 +246,41 @@ class VehiculoController extends Controller
         $vehiculo->delete();
 
         return redirect()->route('vehiculo.index')->with('status', 'Vehiculo eliminada satisfactoriamente');
+    }
+
+    public function graficocategoriaxestado()
+    {
+        // If it is an AJAX request
+        if (request()->ajax()) {
+            $labels = [];
+            $counts = [];
+
+            // Count the number of vehicles retired each month
+            for ($mes = 1; $mes <= 12; $mes++) {
+                $labels[] = $mes;
+
+                $counts[] = Vehiculo::whereMonth('fecha_entrada', $mes)->count();
+            }
+
+            // Define the title, legend, and range of the chart
+            $titulo = 'Cantidad de vehículos retirados por mes';
+            $leyenda = ['Retirados'];
+            $rango = [0, 100];
+
+            $response = [
+                'success' => true,
+                'titulo' => $titulo,
+                'leyenda' => $leyenda,
+                'rango' => $rango,
+                'data' => [
+                    'labels' => $labels,
+                    'counts' => $counts
+                ]
+            ];
+
+            return json_encode($response);
+        }
+
+        return view('panel.reportes.grafico');
     }
 }

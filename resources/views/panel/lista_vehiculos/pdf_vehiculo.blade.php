@@ -73,6 +73,9 @@
                 <strong>Categoría:</strong> {{ $vehiculo->categoria->nombre_categoria }}
             </div>
             <div class="item">
+                <strong>Tarifa:</strong> {{ $tarifa }}
+            </div>
+            <div class="item">
                 <strong>Fecha de Entrada:</strong> {{ $vehiculo->fecha_entrada }}
             </div>
             <div class="item">
@@ -81,6 +84,10 @@
             <div class="code">
                 {{ $vehiculo->codigo }}
             </div>
+
+
+
+            <P>Por favor, no perder este ticket</P>
         </div>
         
 

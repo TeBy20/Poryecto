@@ -75,29 +75,21 @@
                     <div class="col-md-8 mx-auto text-center">
                         <form method="get" action="{{ route('caja.movimientos') }}">
                             @csrf
-                            <div class="row mb-2">
-                                <div class="form-group">
-                                    <label for="fechaInicio">Fecha de Inicio:</label>
-                                    <input type="date" class="form-control mr-2" id="fechaInicio" name="fechaInicio" required>
+                            <div class="d-none">
+                                <div class="row mb-2">
+                                    <div class="form-group">
+                                        <label for="fechaInicio">Fecha de Inicio:</label>
+                                        <input type="date" class="form-control mr-2" id="fechaInicio" name="fechaInicio" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="fechaFin">Fecha de Finalización:</label>
+                                        <input type="date" class="form-control ml-2" id="fechaFin" name="fechaFin" required>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="fechaFin">Fecha de Finalización:</label>
-                                    <input type="date" class="form-control ml-2" id="fechaFin" name="fechaFin" required>
-                                </div>
                             </div>
-                            <div class="row mb-2">
-                                <button type="submit" name="tipoMovimiento" value="ingresos" class="btn btn-primary btn-block">
-                                    Ingresos de Caja
-                                </button>
-                            </div>
-                            <div class="row mb-2">
-                                <button type="submit" name="tipoMovimiento" value="egresos" class="btn btn-danger btn-block">
-                                    Egresos de Caja
-                                </button>
-                            </div>
-                            <div class="row mb-2">
+                            <div class="row mb-2 mt-2">
                                 <button type="submit" name="tipoMovimiento" value="movimientos" class="btn btn-info btn-block">
-                                    Todos los Movimientos
+                                    Arqueo de Caja
                                 </button>
                             </div>
                         </form>
@@ -109,9 +101,15 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Establecer automáticamente las fechas en el día actual
-        document.getElementById('fechaInicio').valueAsDate = new Date();
-        document.getElementById('fechaFin').valueAsDate = new Date();
+        // Obtener la fecha y hora actual
+        var fechaActual = new Date();
+
+        // Restar 24 horas en milisegundos
+        var fechaInicio = new Date(fechaActual.getTime() - 24 * 60 * 60 * 1000);
+
+        // Establecer automáticamente las fechas
+        document.getElementById('fechaInicio').valueAsDate = fechaInicio;
+        document.getElementById('fechaFin').valueAsDate = fechaActual;
     });
 </script>
 @endsection

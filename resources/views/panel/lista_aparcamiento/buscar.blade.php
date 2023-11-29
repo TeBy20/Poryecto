@@ -70,7 +70,7 @@
             <label for="Hora_salida">Hora salida:</label>
             <input class="form-control" type="text" name="Hora_salida" value="{{ \Carbon\Carbon::now()->format('H:i:s') }}" readonly>
         </div>
-        
+
         <div class="form-group">
             <label for="Tiempo_estancia">Tiempo estancia:</label>
             <input class="form-control" type="text" name="Tiempo_estancia" value="@isset($diferenciaHoras) {{ $diferenciaHoras }} horas

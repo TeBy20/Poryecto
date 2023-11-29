@@ -18,7 +18,7 @@ class VehiculoFactory extends Factory
     public function definition(): array
     {
 
-        $categoriaId = Categorias::inRandomOrder()->first()->id;
+        $categoria = Categorias::inRandomOrder()->first();
 
         // Obtener fecha y hora actuales
         $fechaEntrada = now()->format('Y-m-d');
@@ -26,7 +26,7 @@ class VehiculoFactory extends Factory
 
         return [
             'placa_vehiculo' => $this->faker->unique()->word,
-            'categoria_id' => $categoriaId, // FK del id de categorias
+            'categoria_id' => $categoria->id,
             'fecha_entrada' => $fechaEntrada,
             'hora_entrada' => $horaEntrada,
         ];

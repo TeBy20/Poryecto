@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Aparcamiento;
 use App\Models\Vehiculo;
+
 use App\Models\Mediopago;
 use App\Models\Caja;
+
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Models\Categorias;
@@ -31,48 +33,82 @@ class AparcamientoController extends Controller
     {
         $vehiculos = Vehiculo::whereNotIn('placa_vehiculo', Aparcamiento::pluck('placa_vehiculo'))->get();
 
+
         $mediopagos = Mediopago::all();
 
         return view('panel.lista_aparcamiento.create', compact('vehiculos', 'mediopagos'));
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
 
-    public function buscarVehiculo(Request $request)
-    {
-        $request->validate([
-            'placa' => 'nullable|string|max:255',
-            'codigo' => 'nullable|string|min:6', // Cambiado a string y ajustado a 6 caracteres
-        ]);
-
-        $placa = $request->input('placa');
-        $codigo = $request->input('codigo');
-
-        $vehiculo = null;
-
-        if ($placa) {
-            $vehiculo = Vehiculo::where('placa_vehiculo', $placa)->first();
-        } elseif ($codigo) {
-            $vehiculo = Vehiculo::where('codigo', $codigo)->first();
-        }
-
-        if ($vehiculo) {
-            // Calcula la diferencia de horas
-            $horaEntrada = \Carbon\Carbon::parse($vehiculo->fecha_entrada . ' ' . $vehiculo->hora_entrada);
-            $horaSalida = \Carbon\Carbon::now();
-            $diferenciaHoras = $horaSalida->diffInHours($horaEntrada);
-
-            return view('panel.lista_aparcamiento.create', compact('vehiculo', 'diferenciaHoras'));
-        } else {
-            return view('panel.lista_aparcamiento.create')->with('error', 'Vehículo no encontrado.');
-        }
-    }
+     public function buscarVehiculo(Request $request)
+     {
+        $rules = [
+            'placa' => 'nullable|string|min:6|regex:/^[A-Za-z0-9\s]+$/',
+            'codigo' => 'nullable|string|min:6|regex:/^[A-Za-z0-9]+$/',
+        ];
+        
+        // Define los mensajes de error personalizados
+        $messages = [
+            'placa.required_without' => 'El campo placa es obligatorio si el campo código no está presente.',
+            'placa.min' => 'El campo placa debe tener al menos 6 caracteres.',
+            'placa.regex' => 'El campo placa no debe contener caracteres especiales.',
+            'codigo.required_without' => 'El campo código es obligatorio si el campo placa no está presente.',
+            'codigo.min' => 'El campo código debe tener al menos 6 caracteres.',
+            'codigo.regex' => 'El campo código no debe contener caracteres especiales.',
+        ];
+        
+     
+         $request->validate($rules, $messages);
+     
+         $placa = $request->input('placa');
+         $codigo = $request->input('codigo');
+     
+         $vehiculo = null;
+     
+         if ($placa) {
+             $vehiculo = Vehiculo::where('placa_vehiculo', $placa)->first();
+         } elseif ($codigo) {
+             $vehiculo = Vehiculo::where('codigo', $codigo)->first();
+         }
+     
+         if ($vehiculo) {
+             // Calcula la diferencia de horas
+             $horaEntrada = \Carbon\Carbon::parse($vehiculo->fecha_entrada . ' ' . $vehiculo->hora_entrada);
+             $horaSalida = \Carbon\Carbon::now();
+             $diferenciaHoras = $horaSalida->diffInHours($horaEntrada);
+     
+             return view('panel.lista_aparcamiento.create', compact('vehiculo', 'diferenciaHoras'));
+         } else {
+             // Manejar el caso donde el vehículo no se encuentra
+             return view('panel.lista_aparcamiento.create')->with('error', 'Vehículo no encontrado.')->withErrors(['error' => 'Vehículo no encontrado.']);
+         }
+     }
+     
 
     public function procesarBusqueda(Request $request)
     {
+
+        $rules = [
+            'placa' => 'nullable|string|min:6|regex:/^[A-Za-z0-9\s]+$/',
+            'codigo' => 'nullable|string|min:6|regex:/^\d{1,3}$/',
+        ];
+        
+        // Define los mensajes de error personalizados
+        $messages = [
+            'placa.required_without' => 'El campo placa es obligatorio si el campo código no está presente.',
+            'placa.min' => 'El campo placa debe tener al menos 6 caracteres.',
+            'placa.regex' => 'El campo placa no debe contener caracteres especiales.',
+            'codigo.required_without' => 'El campo código es obligatorio si el campo placa no está presente.',
+            'codigo.min' => 'El campo código debe tener al menos 6 caracteres.',
+            'codigo.regex' => 'El campo código debe tener exactamente 3 dígitos.',
+        ];
+    
+        // Valida los datos del formulario
+        $request->validate($rules, $messages);
+
         $mediopagos = Mediopago::all();
 
         $request->validate([
@@ -84,32 +120,37 @@ class AparcamientoController extends Controller
 
         $vehiculo = Vehiculo::where($filtro, $request->input($filtro))->first();
 
-        if (!$vehiculo) {
-            return view('panel.lista_aparcamiento.create')->with('error', 'No se encontró ningún vehículo con la información proporcionada.');
+        if ($vehiculo) {
+            // Calcula la diferencia de horas
+            $horaEntrada = \Carbon\Carbon::parse($vehiculo->fecha_entrada . ' ' . $vehiculo->hora_entrada);
+            $horaSalida = \Carbon\Carbon::now();
+            $diferenciaHoras = $horaSalida->diffInHours($horaEntrada);
+    
+            $tarifa = $vehiculo->categoria->tarifas;
+            $montoTotal = $diferenciaHoras * $tarifa;
+    
+            $aparcamiento = new Aparcamiento();
+    
+            // Asigna manualmente los valores
+            $aparcamiento->placa_vehiculo = $vehiculo->placa_vehiculo;
+            $aparcamiento->codigo = $vehiculo->codigo;
+            $aparcamiento->categoria_id = $vehiculo->categoria_id;
+            $aparcamiento->fecha_entrada = $vehiculo->fecha_entrada;
+            $aparcamiento->hora_entrada = $vehiculo->hora_entrada;
+            $aparcamiento->fecha_salida = now()->format('Y-m-d');
+            $aparcamiento->hora_salida = now()->format('H:i:s');
+            $aparcamiento->tiempo_estancia = $diferenciaHoras;
+            $aparcamiento->monto_total = $montoTotal;
+    
+            $aparcamiento->save();
+    
+            // ... el resto de tu código ...
+    
+            return view('panel.lista_aparcamiento.create', compact('vehiculo', 'diferenciaHoras', 'montoTotal', 'mediopagos'));
+        } else {
+            // Manejar el caso donde el vehículo no se encuentra
+            return view('panel.lista_aparcamiento.create')->with('error', 'Vehículo no encontrado.')->withErrors(['error' => 'Vehículo no encontrado.']);
         }
-
-        // Calcula la diferencia de horas
-        $horaEntrada = \Carbon\Carbon::parse($vehiculo->fecha_entrada . ' ' . $vehiculo->hora_entrada);
-        $horaSalida = \Carbon\Carbon::now();
-        $diferenciaHoras = $horaSalida->diffInHours($horaEntrada);
-
-        $tarifa = $vehiculo->categoria->tarifas;
-
-        $montoTotal = $diferenciaHoras * $tarifa;
-
-        Aparcamiento::create([
-            'placa_vehiculo' => $vehiculo->placa_vehiculo,
-            'codigo' => $vehiculo->codigo,
-            'categoria_id' => $vehiculo->categoria_id,
-            'fecha_entrada' => $vehiculo->fecha_entrada,
-            'hora_entrada' => $vehiculo->hora_entrada,
-            'fecha_salida' => now()->format('Y-m-d'),
-            'hora_salida' => now()->format('H:i:s'),
-            'tiempo_estancia' => $diferenciaHoras,
-            'monto_total' => $montoTotal,
-        ]);
-
-        return view('panel.lista_aparcamiento.create', compact('vehiculo', 'diferenciaHoras', 'montoTotal', 'mediopagos'));
     }
 
 
@@ -122,24 +163,19 @@ class AparcamientoController extends Controller
         $pdf = PDF::loadHtml($pdfView);
 
         // Establecer el nombre del archivo PDF
+
         $filename = 'aparcamiento_' . $aparcamiento->id . '.pdf';
+
 
         // Descargar el PDF en una nueva ventana
         return $pdf->stream($filename);
     }
 
 
-    //  public function registrarSalida(Vehiculo $vehiculo)
-    //  {
-
-    //      return view('panel.lista_vehiculos.pago', compact('vehiculo'));
-    //  }
 
     public function store(Request $request)
     {
-        $request->validate([
-            // Agrega las reglas de validación necesarias
-        ]);
+        
 
         // Obtener datos del formulario
         $placaVehiculo = $request->input('placa_vehiculo');
@@ -152,6 +188,7 @@ class AparcamientoController extends Controller
         $tiempoEstancia = $request->input('Tiempo_estancia');
         $montoTotal = $request->input('Monto');
         $mediopago = $request->input('mediopago');
+
 
         // Buscar la categoría por nombre
         $categoria = Categorias::where('nombre_categoria', $categoriaNombre)->first();
@@ -173,11 +210,12 @@ class AparcamientoController extends Controller
                 $montoTotal = $tarifa;
             }
 
+
             // Crear el Aparcamiento y asignar los valores
             $aparcamiento = new Aparcamiento();
             $aparcamiento->placa_vehiculo = $placaVehiculo;
             $aparcamiento->codigo = $codigo;
-            $aparcamiento->categoria()->associate($categoria); // Asociar la categoría al Aparcamiento
+            $aparcamiento->categoria()->associate($categoria);
             $aparcamiento->fecha_entrada = $fechaEntrada;
             $aparcamiento->hora_entrada = $horaEntrada;
             $aparcamiento->fecha_salida = $fechaSalida;
@@ -203,6 +241,7 @@ class AparcamientoController extends Controller
 
             // Devolver la vista del PDF
             return $pdf;
+
         } else {
             // Manejar el caso donde la categoría no existe
             return redirect()->route('aparcamiento.index')->with('error', 'Categoría no encontrada');

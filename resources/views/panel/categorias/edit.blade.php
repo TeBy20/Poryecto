@@ -17,28 +17,29 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
 
                 <form action="{{ route('categorias.update', $categorias->id) }}" method="POST" novalidate>
                     @csrf
                     @method("PUT")
 
-                    <label class="form-label" for="name">Nombre de Categoria:</label><br>
-                    <input class="form-control" type="text" name="nombre_categoria" value="{{ old('nombre_categoria', $categorias->nombre_categoria) }}">
+                    <div class="form-group">
+                            <label for="nombre_categorias">Nombre de categoria:</label>
+                            <input class="form-control @error('nombre_categoria') is-invalid @enderror" type="text" name="nombre_categoria" value="{{ old('nombre_categoria', $categorias->nombre_categoria) }}">
+                            @error('nombre_categoria')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                    </div>
 
                     <br>
                     <br>
 
-                    <label class="form-label" for="tarifas">Tarifas:</label><br>
-                    <input class="form-control" type="number" name="tarifas" value="{{ old('tarifas', $categorias->tarifas) }}">
+                    <div class="form-group">
+                            <label for="tarifas">Tadsdrifa:</label>
+                            <input class="form-control @error('tarifas') is-invalid @enderror" type="number" name="tarifas" value="{{ old('tarifas', $categorias->tarifas) }}">
+                            @error('tarifas')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                    </div>
                     
                     <br>
                     <br>

@@ -12,7 +12,9 @@ class CajaController extends Controller
         // Agrega lógica para obtener el monto de la caja
         $montoDeCaja = Caja::sum('monto');
 
+
         return view('panel.caja.index', compact('montoDeCaja'));
+
     }
 
     public function ingreso(Request $request)
@@ -28,7 +30,9 @@ class CajaController extends Controller
             'tipo' => 'ingreso', // Establece el tipo como 'ingreso'
         ]);
 
-        return redirect()->route('panel.caja.index')->with('success', 'Ingreso registrado correctamente');
+
+        return redirect()->route('caja.index')->with('success', 'Ingreso registrado correctamente');
+
     }
 
     public function egreso(Request $request)
@@ -55,7 +59,8 @@ class CajaController extends Controller
         ]);
 
         // Redirige de nuevo a la vista de la caja con un mensaje de éxito
-        return redirect()->route('panel.caja.index')->with('success', 'Egreso registrado correctamente');
+
+        return redirect()->route('caja.index')->with('success', 'Egreso registrado correctamente');
     }
 
     public function buscarMovimientos(Request $request)
@@ -99,5 +104,6 @@ class CajaController extends Controller
         return $montoTotal;
     }
     
+
 
 }

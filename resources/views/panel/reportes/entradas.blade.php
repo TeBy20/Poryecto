@@ -10,7 +10,7 @@
 
 @section('content')
 <div class="container">
-    <table class="table">
+    <table class="table" id="tabla-productos">
         <thead>
             <tr>
                 <th>ID</th>
@@ -34,5 +34,13 @@
             @endforeach
         </tbody>
     </table>
+
+    {{-- Botón para volver --}}
+    <div class="row mt-4">
+        <div class="col-md-12 text-center">
+            <a href="{{ url()->previous() }}" class="btn btn-secondary">Volver</a>
+        </div>
+    </div>
 </div>
+
 @stop

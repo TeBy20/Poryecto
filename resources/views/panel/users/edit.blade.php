@@ -1,61 +1,53 @@
 @extends('adminlte::page')
 
 @section('content')
+    @php
+        use Collective\Html\FormFacade as Form;
+    @endphp
     <div class="card">
         <div class="card-header">
             <h3 class="card-title">Editar Usuario</h3>
         </div>
-        <div class="card-body">
-            <form action="{{ route('users.update', $user->id) }}" method="POST">
-                @csrf
-                @method('PUT')
-
+        <div class="card">
+            <div class="card-body">
                 <div class="form-group">
-                    <label for="name">Nombre:</label>
-                    <input type="text" name="name" class="form-control" value="{{ $user->name }}">
-                    @error('name')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                    <label for="name" class="h5">Nombre:</label>
+                    <p class="form-control">{{ $user->name }}</p>
                 </div>
 
                 <div class="form-group">
-                    <label for="email">Correo Electrónico:</label>
-                    <input type="email" name="email" class="form-control" value="{{ $user->email }}">
-                    @error('email')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                    <label for="email" class="h5">Correo Electrónico:</label>
+                    <p class="form-control">{{ $user->email }}</p>
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" name="password" class="form-control" placeholder="Deja vacío para mantener la contraseña actual">
-                    @error('password')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
+                <h2 class="h5">Listado de roles</h2>
 
-                {{-- Agrega más campos según sea necesario --}}
+                {!! Form::model($user, ['route' => ['users.update', $user], 'method' => 'put', 'id' => 'roleForm']) !!}
 
-                <button type="submit" class="btn btn-primary" onclick="confirmUpdate()">Actualizar</button>
-            </form>
+                @foreach ($roles as $role)
+                    <div class="form-check">
+                        {!! Form::checkbox('roles[]', $role->id, in_array($role->id, $user->roles->pluck('id')->toArray()), ['class' => 'form-check-input', 'onclick' => 'checkRoles(this)']) !!}
+                        {!! Form::label('roles[]', $role->name, ['class' => 'form-check-label']) !!}
+                    </div>
+                @endforeach
 
-            <!-- Botón para la alerta de confirmación de eliminación -->
-            <a href="{{ route('users.index') }}" class="btn btn-secondary mt-2">Volver al Inicio</a>
+                {!! Form::submit('Asignar rol', ['class' => 'btn btn-primary mt-2']) !!}
+                {!! Form::close() !!}
+            </div>
         </div>
+
+        <a href="{{ route('users.index') }}" class="btn btn-secondary mt-2">Volver al Inicio</a>
     </div>
 
     <script>
-        function confirmUpdate() {
-            // Muestra una alerta de confirmación de actualización
-            alert('Usuario actualizado exitosamente');
-        }
-
-        function confirmDelete(userId) {
-            // Muestra una alerta de confirmación de eliminación
-            if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
-                // Envía el formulario de eliminación si el usuario confirma
-                document.getElementById('delete-form').submit();
-            }
+        function checkRoles(checkbox) {
+            var checkboxes = document.querySelectorAll('.form-check-input');
+            
+            checkboxes.forEach(function (element) {
+                if (element !== checkbox) {
+                    element.checked = false;
+                }
+            });
         }
     </script>
 @endsection

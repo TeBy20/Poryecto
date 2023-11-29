@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
@@ -29,12 +29,6 @@ Route::get('/zonas/create', [ZonasController::class, 'create'])->name('zonas.cre
 Route::put("/zonas/{zona}", [ZonasController::class, "update"])->name("zonas.update");
 Route::delete('/zonas/{zona}', [ZonasController::class, 'destroy'])->name('zonas.destroy');
 Route::get("/zonas/{zona}/edit", [ZonasController::class, "edit"])->name("zonas.edit");
-
-//Cocheras
-
-
-//Categorias
-
 
 //Cargos
 Route::get('/cargos', [CargosController::class, 'index'])->name('cargos.index');
@@ -59,9 +53,5 @@ Route::get('/mediopagos/mediopago', [MediopagoController::class, 'create'])->nam
 Route::put("/mediopagos/{mediopago}", [MediopagoController::class, "update"])->name("mediopago.update");
 Route::delete('/mediopagos/{mediopago}', [MediopagoController::class, 'destroy'])->name('mediopago.destroy');
 Route::get("/mediopagos/{mediopago}/edit", [MediopagoController::class, "edit"])->name("mediopago.edit");
-
-// Ruta para la página principal de la caja
-
-
 
 

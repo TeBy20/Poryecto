@@ -7,27 +7,32 @@
 @stop
 
 @section('content')
-@if (session('error'))
-<div class="alert alert-danger">
-    {{ session('error') }}
-</div>
-@endif
 
-<form action="{{ route('procesar-busqueda') }}" method="post">
-    @csrf
+    
 
-    <div class="mb-3">
-        <label for="placa" class="form-label">Buscar por placa:</label>
-        <input type="text" class="form-control" name="placa">
-    </div>
+    <form action="{{ route('procesar-busqueda') }}" method="post">
+        @csrf
 
-    <div class="mb-3">
-        <label for="codigo" class="form-label">Buscar por código de ticket:</label>
-        <input type="text" class="form-control" name="codigo">
-    </div>
+        <div class="mb-3">
+            <label for="placa" class="form-label">Buscar por placa:</label>
+            <input type="text" class="form-control @error('placa') is-invalid @enderror" name="placa" value="{{ old('placa') }}">
+            @error('placa')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-    <button type="submit" class="btn btn-primary">Buscar</button>
-</form>
+        <div class="mb-3">
+            <label for="codigo" class="form-label">Buscar por codigo de ticket:</label>
+            <input type="text" class="form-control @error('codigo') is-invalid @enderror" name="codigo" value="{{ old('codigo') }}">
+            @error('codigo')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+        
+
+        <button type="submit" class="btn btn-primary">Buscar</button>
+    </form>
+
 
 @isset($vehiculo)
 
@@ -72,17 +77,6 @@
             <input class="form-control" type="text" name="Hora_salida" value="{{ \Carbon\Carbon::now()->format('H:i:s') }}" readonly>
         </div>
 
-        <div class="mb-3">
-            <label for="mediopago" class="form-label">Seleccionar Medio de Pago:</label>
-            <select class="form-select" name="mediopago">
-                @foreach(\App\Models\Mediopago::pluck('nombre_mediopago') as $mediopagoItem)
-                    <option value="{{ $mediopagoItem }}" {{ old('mediopago') == $mediopagoItem ? 'selected' : '' }}>
-                        {{ $mediopagoItem }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
         <div class="form-group">
             <label for="Tiempo_estancia">Tiempo estancia:</label>
             <input class="form-control" type="text" name="Tiempo_estancia" value="@isset($diferenciaHoras) {{ $diferenciaHoras }} horas
@@ -91,16 +85,30 @@
                                                                                     @endisset" readonly>
         </div>
         <div class="form-group">
+
                     <label for="Monto">Monto total:</label>
                     <input class="form-control" type="text" name="Monto"
                            value="@isset($diferenciaHoras)@if($diferenciaHoras <= 0){{ $vehiculo->categoria->tarifas }}@else{{ $diferenciaHoras * $vehiculo->categoria->tarifas }}@endif
                            @endisset" readonly>
         </div>
 
+        <div class="mb-3">
+            <label for="mediopago" class="form-label">Seleccionar Medio de Pago:</label>
+            <select class="form-select @error('mediopago') is-invalid @enderror" name="mediopago">
+                <option value="" selected disabled>Por favor seleccione un método de pago</option>
+                @foreach(\App\Models\Mediopago::pluck('nombre_mediopago') as $mediopagoItem)
+                    <option value="{{ $mediopagoItem }}" {{ old('mediopago') == $mediopagoItem ? 'selected' : '' }}>
+                        {{ $mediopagoItem }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
 
         <br>
 
         <button class="btn btn-primary" type="submit">Registrar Salida</button>
+
         <a class="btn btn-secondary" href="{{ route('aparcamiento.index') }}">Cancelar</a>
     </form>
 

@@ -29,6 +29,7 @@ return new class extends Migration
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
             $table->foreign('nombre_mediopago')->references('nombre_mediopago')->on('mediopagos')->onDelete('cascade');
 
+
             $table->timestamps();
         });
     }

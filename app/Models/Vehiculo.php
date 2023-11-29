@@ -11,7 +11,7 @@ class Vehiculo extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['placa_vehiculo', 'categoria_id', 'hora_entrada', 'fecha_entrada', 'codigo', 'estado']; // Agrega 'codigo' y 'estado' a $fillable
+    protected $fillable = ['placa_vehiculo', 'categoria_id', 'hora_entrada', 'fecha_entrada', 'codigo', 'estado'];
 
     protected $attributes = [
         'hora_entrada' => null, // Opcionalmente, puedes establecerlo a '00:00:00' si lo prefieres
@@ -44,4 +44,7 @@ class Vehiculo extends Model
     {
         return $this->hasMany(Aparcamiento::class, 'placa_vehiculo');
     }
+    
+
+
 }

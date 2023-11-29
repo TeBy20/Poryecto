@@ -14,7 +14,7 @@ class AparcamientoSeeder extends Seeder
      */
     public function run(): void
     {
-        Aparcamiento::factory()->count(2)->create();
+        Aparcamiento::factory()->count(4)->create();
     }
 }
 

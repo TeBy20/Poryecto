@@ -19,8 +19,8 @@ class RolSeeder extends Seeder
         $rol_playero = Role::create(['name' => 'playero']);
 
         // Permisos para cada Rol
-    Permission::create(['name' => 'lista_usuarios'])->assignRole($rol_admin);
-    Permission::create(['name' => 'lista_vehiculos'])->assignRole($rol_playero);
+    Permission::create(['name' => 'VISTA_ADMIN'])->assignRole($rol_admin);
+    Permission::create(['name' => 'VISTA_PLAYERO'])->assignRole($rol_playero);
     //Permission::create(['name' => 'lista_pagos'])->syncRoles([$rol_vendedor,
 
     }

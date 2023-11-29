@@ -11,11 +11,13 @@
 @section('content')
     <div class="container-fluid">
         <div class="row">
+
             <div class="col-12 mb-3">
                 <a href="{{ route('users.create') }}" class="btn btn-success text-uppercase">
                     Nuevo Usuario
                 </a>
             </div>
+            
 
             @if (session('alert'))
                 <div class="col-12">
@@ -35,6 +37,7 @@
                                     <th scope="col">#</th>
                                     <th scope="col" class="text-uppercase">Nombre</th>
                                     <th scope="col" class="text-uppercase">Correo</th>
+                                    <th scope="col" class="text-uppercase">Rol</th>
                                     <th scope="col" class="text-uppercase">Opciones</th>
                                 </tr>
                             </thead>
@@ -44,6 +47,11 @@
                                         <td>{{ $user->id }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->email }}</td>
+                                        <td>
+                                            @foreach ($user->roles as $role)
+                                                <span class="badge badge-info">{{ $role->name }}</span>
+                                            @endforeach
+                                        </td>
                                         <td>
                                             <div class="d-flex">
                                                 <a href="{{ route('users.show', $user->id) }}"

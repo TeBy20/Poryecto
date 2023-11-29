@@ -14,6 +14,6 @@ class CocherasSeeder extends Seeder
      */
     public function run(): void
     {
-        cocheras::factory()->count(1000)->create();
+        cocheras::factory()->count(100)->create();
     }
 }

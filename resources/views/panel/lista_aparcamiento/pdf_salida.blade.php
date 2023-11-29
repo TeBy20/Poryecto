@@ -46,6 +46,7 @@
         }
 
         .codigo {
+
             font-size: 100px;
             font-weight: bold;
             margin-top: 20px;
@@ -59,7 +60,7 @@
 </head>
 <body>
     <div class="card">
-        <h1>Ticket de ingreso</h1>
+        <h1>Ticket de salida</h1>
 
         <h2>Radiador Springs</h2>
 
@@ -67,6 +68,7 @@
 
         <div class="ticket-info">
             <div class="item">
+
                 <strong>Número de placa:</strong> {{ $aparcamiento->placa_vehiculo }}
             </div>
             <div class="item">
@@ -94,6 +96,7 @@
 
         
 </div>
+
         
 
     </div>

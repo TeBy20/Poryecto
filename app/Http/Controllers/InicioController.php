@@ -9,10 +9,12 @@ class InicioController extends Controller
 {
     public function index()
     {
-        // Obtén el número de vehículos registrados hoy
-        $vehiculosRegistradosHoy = Vehiculo::whereDate('created_at', today())->count();
+        // Obtén el número de vehículos retirados hoy
+        $vehiculosRetiradosHoy = Vehiculo::whereDate('created_at', today())
+            ->where('estado', 'Retirado')
+            ->count();
 
         // Pasa los datos a la vista
-        return view('panel.inicioPrincipal', compact('vehiculosRegistradosHoy'));
+        return view('panel.inicioPrincipal', compact('vehiculosRetiradosHoy'));
     }
 }

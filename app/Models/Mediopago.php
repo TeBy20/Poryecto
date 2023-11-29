@@ -17,4 +17,5 @@ class Mediopago extends Model
     {
         return $this->hasMany(Aparcamiento::class, 'nombre_mediopago');
     }
+
 }

@@ -117,9 +117,9 @@ return [
     */
 
     'preloader' => [
-        'enabled' => false,
+        'enabled' => true, // Cambiar a true para habilitar el preloader
         'img' => [
-            'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
+            'path' => 'vendor/adminlte/dist/img/EstIcon.png',
             'alt' => 'AdminLTE Preloader Image',
             'effect' => 'animation__shake',
             'width' => 60,
@@ -307,70 +307,95 @@ return [
     */
 
     'menu' => [
+
         [
-            'text' => 'Lista de usuarios',
-            'route' => 'users.index',
-            'icon' => 'fas fa-users', // icono de fontawesome
-            'can' => 'lista_usuarios' // permiso de admin
+            'text' => 'Inicio',
+            'route' => 'panel.inicioPrincipal',
+            // 'url' => '#',
+            'icon' => 'fas fa-fw fa-home', // icono de fontawesome
+            'can' => 'VISTA_ADMIN', // permiso del cliente
+            'align' => 'center' // Alinea el icono al centro
         ],
         [
             'text' => 'Inicio',
             'route' => 'panel.inicioPrincipal',
             // 'url' => '#',
             'icon' => 'fas fa-fw fa-home', // icono de fontawesome
-            'can' => 'lista_vehiculos', // permiso del cliente
+            'can' => 'VISTA_PLAYERO', // permiso del cliente
             'align' => 'center' // Alinea el icono al centro
         ],
         [
-            'text' => 'Entradas',
+            'text' => 'Entradas de Vehiculos',
             'route' => 'vehiculo.create',
             // 'url' => '#',
             'icon' => 'fas fa-plus', // icono de fontawesome
-            'can' => 'lista_vehiculos',
+            'can' => 'VISTA_ADMIN',
             'target' => '_blank'
         ],
         [
-            'text' => 'Salidas',
+            'text' => 'Entradas de Vehiculos',
+            'route' => 'vehiculo.create',
+            // 'url' => '#',
+            'icon' => 'fas fa-plus', // icono de fontawesome
+            'can' => 'VISTA_PLAYERO',
+            'target' => '_blank'
+        ],
+        [
+            'text' => 'Salidas de Vehiculos',
             'route' => 'aparcamiento.create',
             // 'url' => '#',
             'icon' => 'fas fa-fw fa-times', // icono de fontawesome
-            'can' => 'lista_vehiculos',
+            'can' => 'VISTA_ADMIN',
             'target' => '_blank'
         ],
         [
-            'text' => 'Categorias',
+            'text' => 'Salidas de Vehiculos',
+            'route' => 'aparcamiento.create',
+            // 'url' => '#',
+            'icon' => 'fas fa-fw fa-times', // icono de fontawesome
+            'can' => 'VISTA_PLAYERO',
+            'target' => '_blank'
+        ],
+        [
+            'text' => 'Categorias de Vehiculos',
             'route' => 'categorias.index',
             // 'url' => '#',
             'icon' => 'fas fa-fw fa-car', // icono de fontawesome
-            'can' => 'lista_vehiculos', // permiso del cliente
+            'can' => 'VISTA_ADMIN', // permiso del cliente
         ],
         [
             'text' => 'Cocheras',
             'route' => 'panel.cocheras.index',
             // 'url' => '#',
+
             'icon' => 'fas fa-fw fa-parking', // icono de fontawesome
-            'can' => 'lista_vehiculos', // permiso del cliente
+            'can' => 'VISTA_ADMIN', // permiso del cliente
         ],
         [
             'text' => 'Caja',
             'route' => 'caja.index',
             'icon' => 'fas fa-cash-register',
-            'can' => 'lista_vehiculos',
+            'can' => 'VISTA_ADMIN',
+        ],
+        [
+            'text' => 'Caja',
+            'route' => 'caja.index',
+            'icon' => 'fas fa-cash-register',
+            'can' => 'VISTA_PLAYERO',
         ],
         [
             'text' => 'Lista de usuarios',
             'route' => 'users.index',
             'icon' => 'fas fa-users',
-            'can' => 'lista_vehiculos',
+            'can' => 'VISTA_ADMIN',
         ],
         [
             'text' => 'Reportes',
             'route' => 'reportes.index',
-            'icon' => 'fas fa-users',
-            'can' => 'lista_vehiculos',
+            'icon' => 'fas fa-book',
+            'can' => 'VISTA_ADMIN',
         ]
     ],
-    
 
     /*
     |--------------------------------------------------------------------------

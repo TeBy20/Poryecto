@@ -24,6 +24,7 @@ class AparcamientoFactory extends Factory
         $vehiculo = Vehiculo::inRandomOrder()->first();
         $mediopago = Mediopago::inRandomOrder()->first();
 
+
         return [
             'categoria_id' => $vehiculo->categoria_id,
             'placa_vehiculo' => $vehiculo->placa_vehiculo,
@@ -35,6 +36,7 @@ class AparcamientoFactory extends Factory
             'nombre_mediopago' => $mediopago->nombre_mediopago,
             'tiempo_estancia' => $this->faker->numberBetween(1, 300),
             'monto_total' =>  $this->faker->randomFloat(2, 10, 100),
+
         ];
     }
 

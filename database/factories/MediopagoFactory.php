@@ -16,8 +16,12 @@ class MediopagoFactory extends Factory
      */
     public function definition(): array
     {
+
+        $nombreMediopago = $this->faker->unique()->randomElement(['Efectivo', 'Credito', 'transferencia']);
+
         return [
-            'nombre_mediopago' => fake()->sentence(),
+            'nombre_mediopago' => $nombreMediopago,
         ];
+
     }
 }

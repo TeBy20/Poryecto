@@ -13,6 +13,6 @@ class MediopagoSeeder extends Seeder
      */
     public function run(): void
     {
-        Mediopago::factory(4)->create();
+        Mediopago::factory(3)->create();
     }
 }

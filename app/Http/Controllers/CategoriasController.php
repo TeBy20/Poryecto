@@ -12,63 +12,84 @@ class CategoriasController extends Controller
     {
         $categorias = Categorias::all();
 
-        return view('categorias.index', compact('categorias'));
+        return view('panel.categorias.index', compact('categorias'));
     }
 
-    public function tarifasMotos()
-    {
-
-        $tarifasMotos = \DB::select("SELECT tarifas FROM categorias WHERE nombre_categoria = 'Motos'");
-        
-
-        return $tarifasMotos;
-    }
-
-    public function tarifasAutos()
-    {
-
-        $tarifasAutos = \DB::select("SELECT tarifas FROM categorias WHERE nombre_categoria = 'Autos'");
-        
-
-        return $tarifasAutos;
-    }
 
     public function create()
     {
-        return view('categorias.create');
+        return view('panel.categorias.create');
     }
 
     public function store(Request $request)
     {
 
+        $rules = [
+            'nombre_categoria' => 'required|string|max:200|regex:/^[A-Za-z0-9\s]+$/',
+            'tarifas' => 'required|max:15|numeric',
+        ];
+        
+        // Define los mensajes de error personalizados
+        $messages = [
+            'nombre_categoria.required' => 'El campo Nombre de categoria es obligatorio.',
+            'nombre_categoria.max' => 'El campo Nombre de categoria no debe tener mas de 200 caracteres.',
+            'nombre_categoria.regex' => 'El campo Nombre de categoria no debe contener caracteres especiales.',
+            'tarifas.required' => 'El campo tarifas es obligatorio.',
+            'tarifas.max' => 'El campo tarifas no debe tener mas 15 caracteres.',
+            'tarifas.regex' => 'El campo tarifas no debe contener caracteres especiales.',
+        ];
+
+        $request->validate($rules, $messages);
+
         Categorias::create($request->all());
 
         return redirect()->route('categorias.index')->with('status', 'Categoría creada satisfactoriamente');
-        }
+    }
 
     public function edit($id)
         {
             $categorias = Categorias::findOrFail($id);
-            return view('categorias.edit', ['categorias' => $categorias]);
+            return view('panel.categorias.edit', ['categorias' => $categorias]);
         }
 
         public function update(Request $request, $id)
         {
-            $categorias = Categorias::findOrFail($id);
 
+            $rules = [
+                'nombre_categoria' => 'required|string|max:200|regex:/^[A-Za-z0-9\s]+$/',
+                'tarifas' => 'required|numeric|max:999999999999999',
+            ];
             
+            // Define los mensajes de error personalizados
+            $messages = [
+                'nombre_categoria.required' => 'El campo Nombre de categoria es obligatorio.',
+                'nombre_categoria.max' => 'El campo Nombre de categoria no debe tener más de 200 caracteres.',
+                'nombre_categoria.regex' => 'El campo Nombre de categoria no debe contener caracteres especiales.',
+                'tarifas.required' => 'El campo tarifas es obligatorio.',
+                'tarifas.numeric' => 'Los valores deben ser numéricos.',
+                'tarifas.max' => 'El campo tarifas no debe tener más de 15 dígitos.',
+            ];
+    
+            $request->validate($rules, $messages);
+
+            $categorias = Categorias::findOrFail($id);
 
             $categorias->update($request->all());
 
             return redirect()->route("categorias.index")->with("status", "Categoría actualizada satisfactoriamente!");
         }
 
-    public function destroy($id)
-    {
-        $categorias = Categorias::findOrFail($id);
-
-        $categorias->delete();
-
-        return redirect()->route('categorias.index')->with('status', 'Categoria eliminada satisfactoriamente');
-    }
+        public function destroy($id)
+        {
+            $categoria = Categorias::findOrFail($id);
+        
+            // Eliminar vehículos asociados
+            $categoria->vehiculos()->delete();
+        
+            // Luego eliminar la categoría
+            $categoria->delete();
+        
+            return redirect()->route('categorias.index')->with('status', 'Categoría eliminada satisfactoriamente');
+        }
+        
 }

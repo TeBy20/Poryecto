@@ -7,6 +7,7 @@ use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\InicioController;
 use App\Http\Controllers\CajaController;
+
 use Illuminate\Support\Facades\Route;
 
 // Route::get("/", function () {
@@ -19,10 +20,14 @@ Route::resource('/vehiculos', VehiculoController::class)->names('vehiculo');
 Route::resource('/aparcamientos', AparcamientoController::class)->names('aparcamiento');
 
 Route::resource('/cocheras', CocherasController::class)->names('panel.cocheras');
+Route::get('/panel/coceras/deleteByPiso', [CocherasController::class, 'destroyByPiso'])->name('panel.cocheras.destroyByPiso');
+Route::post('/panel/coceras/deleteByPiso', [CocherasController::class, 'deleteByPiso']);
 
-Route::resource('/categorias', CategoriasController ::class)->names('categorias');
+
+Route::resource('/categorias', CategoriasController::class)->names('categorias');
 
 Route::resource('/users', UserController::class)->names('users');
+
 
 Route::get('/inicio', [InicioController::class, 'index'])->name('panel.inicioPrincipal');
 
@@ -52,6 +57,7 @@ Route::get('/caja/egresos', function () {
 
 Route::get('/reportes', [VehiculoController::class, 'index'])->name('reportes.index');
 Route::get('/reportes/lista-tickets', [VehiculoController::class, 'listaTickets'])->name('lista_tickets');
+Route::get('/reportes/grafico', [VehiculoController::class, 'graficocategoriaxestado'])->name('graficocategoriaxestado');
 Route::get('/reportes/salidas', [VehiculoController::class, 'reporteSalidas'])->name('reporte_salidas');
 Route::get('/reportes/entradas', [VehiculoController::class, 'reporteEntradas'])->name('reporte_entradas');
 

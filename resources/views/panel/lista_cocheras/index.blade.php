@@ -22,6 +22,13 @@
                 Nuevas Cocheras
             </a>
         </div>
+
+        <div class="col-12 mb-3">         
+            <a href="{{ route('panel.cocheras.destroyByPiso') }}" class="btn btn-danger text-uppercase">
+                Eliminar Cocheras por Piso
+            </a>
+        </div>
+        
         
         @if (session('alert'))
             <div class="col-12">
@@ -51,7 +58,6 @@
                             <th scope="col">#</th>
                             <th scope="col" class="text-uppercase">Lugar</th>
                             <th scope="col" class="text-uppercase">Piso</th>
-                            <th scope="col" class="text-uppercase">Disponible</th>
                             <th scope="col" class="text-uppercase">Opciones</th>
                         </tr>
                     </thead>
@@ -61,7 +67,7 @@
                             <td>{{ $cochera->id }}</td>
                             <td>{{ $cochera->num_lugar }}</td>
                             <td>{{ $cochera->piso }}</td>
-                            <td>{{ $cochera->disponible }}</td>
+                          
                             <td>
                                 <div class="d-flex">
                                     

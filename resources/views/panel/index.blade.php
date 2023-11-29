@@ -4,6 +4,9 @@
 
 @section('content_header')
 <h1>Programando con Laravel 10</h1>
+<!-- Agrega esto antes de </body> -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 @stop
 
 @section('content')

@@ -40,7 +40,9 @@
             </div>
             @endif
 
+
             <form action="{{ route('panel.cocheras.update', $cochera->id) }}" method="POST" novalidate>
+
                 @csrf
                 @method("PUT")
 
@@ -55,7 +57,9 @@
                 <br>
 
                 <button class="btn btn-primary" type="submit">Guardar Cochera</button>
+
                 <a class="btn btn-secondary" href="{{ route('panel.cocheras.index') }}">Cancelar</a>
+
             </form>
             </div>
         </div>
